@@ -53,7 +53,7 @@ def upload_file():
         return 'file parsed'
 
 
-db_path_variable = 'DB_PATH'
+db_path_variable = 'DB_PATH'  # environment variable containing db path
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
