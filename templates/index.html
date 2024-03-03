@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carica una circolare</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Carica una circolare</h1>
+    <div class="upload-area" id="uploadArea">
+        <label for="file" class="custom-file-upload">Seleziona un file</label>
+        <input type="file" name="file" id="file" class="inputfile" accept=".pdf" onchange="uploadFile(this)">
+        <div id="progressBarContainer" style="display: none;">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <span id="progressText">Caricamento...</span>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='upload.js') }}"></script>
+</body>
+</html>
