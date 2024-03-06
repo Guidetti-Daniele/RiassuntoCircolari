@@ -9,7 +9,7 @@ class DbTable:
 
         self.db_cursor.execute('''SELECT count(name) FROM sqlite_master WHERE type='table' AND name='circolari' ''')
         if self.db_cursor.fetchone()[0] == 0:  # create table if not already created
-            self.db_cursor.execute("CREATE TABLE circolari(name, date, hash, text)")
+            self.db_cursor.execute("CREATE TABLE circolari(name, date, hash, text, number)")
 
     def close_connection(self):  # close and save
         self.connection.commit()
@@ -21,6 +21,6 @@ class DbTable:
 
         return hash_ in db_hashes
 
-    def add_row(self, name, date, hash_, text):
-        self.db_cursor.execute("INSERT INTO circolari VALUES (?,?,?,?)",
-                               (name, date, hash_, text,))
+    def add_row(self, name, date, hash_, text, number):
+        self.db_cursor.execute("INSERT INTO circolari VALUES (?,?,?,?,?)",
+                               (name, date, hash_, text, number,))

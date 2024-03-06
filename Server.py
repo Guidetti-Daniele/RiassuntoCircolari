@@ -36,14 +36,19 @@ def upload_file():
                     break
                 file_hash.update(data)
 
-        date = datetime.now().strftime("%Y-%m-%d %H:%M")
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         hash_string = file_hash.hexdigest()
 
         database = DbTable(os.environ[db_path_variable])
 
         if not database.contains_hash(hash_string):  # parse and add file to db if not already parsed
             parsed_text = parse_pdf(temp_file_path, "Tabella")
-            database.add_row(file.filename, date, hash_string, parsed_text)
+
+            split_string = file.filename.split('.')
+
+            print(split_string)
+
+            database.add_row(split_string[1], date, hash_string, parsed_text, split_string[0])
 
         database.close_connection()  # save and close db
 
