@@ -41,14 +41,43 @@ def upload_file():
 
         database = DbTable(os.environ[db_path_variable])
 
-        if not database.contains_hash(hash_string):  # parse and add file to db if not already parsed
-            parsed_text = parse_pdf(temp_file_path, "Tabella")
+        circolari_name = "circolari"
+        circolari_values = {
+            "number": "",
+            "name": "",
+            "date": date,
+            "hash": hash_string,
+            "text": ""
+        }
 
-            split_string = file.filename.split('.')
+        comunicazioni_name = "comunicazioni"
+        comunicazioni_values = {
+            "name": "",
+            "date": date,
+            "hash": hash_string,
+            "text": ""
+        }
 
-            print(split_string)
+        database.init_table(circolari_name, list(circolari_values.keys()))
+        database.init_table(comunicazioni_name, list(comunicazioni_values.keys()))
 
-            database.add_row(split_string[1], date, hash_string, parsed_text, split_string[0])
+        split_string = file.filename.split('.')
+
+        if split_string[0].isdigit():  # CIRCOLARI
+            if not database.contains(hash_string, "hash",
+                                     circolari_name):
+                circolari_values["text"] = parse_pdf(temp_file_path, "Tabella")
+                circolari_values["number"] = split_string[0]
+                circolari_values["name"] = split_string[1]
+
+                database.add_row(circolari_name, tuple(circolari_values.values()))
+        else:  # COMUNICAZIONI
+            if not database.contains(hash_string, "hash",
+                                     comunicazioni_name):
+                comunicazioni_values["text"] = parse_pdf(temp_file_path, "Tabella")
+                comunicazioni_values["name"] = split_string[0]
+
+                database.add_row(comunicazioni_name, tuple(comunicazioni_values.values()))
 
         database.close_connection()  # save and close db
 
