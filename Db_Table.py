@@ -7,10 +7,14 @@ class DbTable:
         self.connection = sqlite3.connect(db_path_string)
         self.db_cursor = self.connection.cursor()
 
-    def init_table(self, table_name, columns):
+    def init_table(self, table_name, columns, types):
         self.db_cursor.execute(f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table_name}' ")
+
         if self.db_cursor.fetchone()[0] == 0:  # create table if not already created
-            self.db_cursor.execute(f"CREATE TABLE {table_name}({', '.join(columns)})")
+            columns_with_types = [f"{column} {type_}" for column, type_ in zip(columns, types)]
+
+            create_table_query = f"CREATE TABLE {table_name}({', '.join(columns_with_types)})"
+            self.db_cursor.execute(create_table_query)
 
     def close_connection(self):  # close and save
         self.connection.commit()

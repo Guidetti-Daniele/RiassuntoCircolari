@@ -47,19 +47,36 @@ def upload_file():
             "name": "",
             "date": date,
             "hash": hash_string,
-            "text": ""
+            "text": "",
+            "point": None
         }
+        circolari_types = [
+            "INTEGER",
+            "TEXT",
+            "DATE",
+            "TEXT PRIMARY KEY",
+            "TEXT",
+            "BLOB"
+        ]
 
         comunicazioni_name = "comunicazioni"
         comunicazioni_values = {
             "name": "",
             "date": date,
             "hash": hash_string,
-            "text": ""
+            "text": "",
+            "point": None
         }
+        comunicazioni_types = [
+            "TEXT",
+            "DATE",
+            "TEXT PRIMARY KEY",
+            "TEXT",
+            "BLOB"
+        ]
 
-        database.init_table(circolari_name, list(circolari_values.keys()))
-        database.init_table(comunicazioni_name, list(comunicazioni_values.keys()))
+        database.init_table(circolari_name, list(circolari_values.keys()), circolari_types)
+        database.init_table(comunicazioni_name, list(comunicazioni_values.keys()), comunicazioni_types)
 
         split_string = file.filename.split('.')
 
