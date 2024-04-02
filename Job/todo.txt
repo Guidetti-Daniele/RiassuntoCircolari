@@ -1,0 +1,14 @@
+destinatario - dropdown
+
+classe
+
+elenco circolari in base a selezioni precedenti
+
+riassunto
+
+
+
+
+job schedulato parametro con path a cartella circolari e file che identifica la cartella, e parametri per ws gatto
+
+per connection string db argomento
