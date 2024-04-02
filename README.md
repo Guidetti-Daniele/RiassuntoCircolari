@@ -22,7 +22,7 @@ Three prefixes are needed for this script, and you can separate them using these
 This is the LLM prefix, always used.
 - ***#JSON_PREFIX***   
 This text is sent to the LLM before parsing the data from a text and saving it in a JSON string
-- ***#JSON_PREFIX***   
+- ***#TEXT_PREFIX***   
 This text is sent to the LLM before summarizing the text
 
 Example:
