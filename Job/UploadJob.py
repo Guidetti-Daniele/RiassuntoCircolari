@@ -35,6 +35,24 @@ def get_hashes(path, exclude):
     return hashes
 
 
+def read_prefix_file(prefix_file_path):
+    return_text = {}
+
+    with open(prefix_file_path, 'r', encoding="utf-8") as file:
+        file_lines = file.readlines()
+        key_word = None
+
+        for line in file_lines:
+
+            if line.startswith('#'):
+                key_word = line.strip()
+                return_text[key_word] = ""
+            else:
+                return_text[key_word] += line
+
+    return return_text
+
+
 def llm(client, model, prefix, query):
     completion = client.chat.completions.create(
         model=model,
@@ -51,11 +69,16 @@ def llm(client, model, prefix, query):
 def main():
     arg_parse = argparse.ArgumentParser()
 
+    # Path to the folder containing all the files
     arg_parse.add_argument("-folder_path", dest="folder_path", required=True)
+    # Path to the SQLite DB
     arg_parse.add_argument("-db_connection_string", dest="conn_str", required=True)
+    # Name for the prefix file located in the files folder
     arg_parse.add_argument("-prefix_file_name", dest="prefix_file", required=True)
 
+    # OpenAI API key
     arg_parse.add_argument("-api_key", dest="api_key", required=True)
+    # OpenAI LLM model
     arg_parse.add_argument("-openai_model", dest="model", required=True)
 
     args = arg_parse.parse_args()
@@ -64,13 +87,20 @@ def main():
     prefix_file = args.prefix_file  # this file contains the LLM prefix
 
     filenames = [os.fsdecode(file) for file in os.listdir(folder_path)]
-    if prefix_file not in filenames:  # verify that is the correct folder
-        raise "Not correct directory - make a file named .circolari containing the prefix for the LLM"
+    if prefix_file not in filenames:  # check the prefix file
+        raise FileNotFoundError("Prefix file missing")
 
     llm_client = OpenAI(api_key=args.api_key)
     model = args.model
-    with open(os.path.join(folder_path, prefix_file), 'r') as file:
-        llm_prefix = file.read()
+
+    prefix = read_prefix_file(os.path.join(folder_path, prefix_file))
+
+    try:
+        llm_prefix = prefix['#PREFIX']
+        json_prefix = prefix['#JSON_PREFIX']
+        text_prefix = prefix['#JSON_PREFIX']
+    except KeyError as e:
+        raise KeyError(f"Check for the keyword {str(e)} in the prefix file")
 
     database = SqliteDB(args.conn_str)
 
@@ -105,15 +135,8 @@ def main():
 
         date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
 
-        data = llm(llm_client, model, llm_prefix, f"""JSON
-        Dati richiesti:
-        Numero (Numero della circolare, se non specificato è -1),
-        Nome (Nome della circolare),
-        Destinatari (rispondi usando alcune tra queste parole come lista: "Studenti", "Docenti", "Genitori", "Personale"),
-        Classi (Le classi che riguardano la circolare come lista, se tutte rispondi con ["Tutte le classi"], se la sezione non viene specificata rispondi con "n#" , dove n è il numero della classe)
-        
-        {parsed_text}
-        """).replace('json', '').replace('```', '')
+        data = llm(llm_client, model, llm_prefix, f"{json_prefix}\n{parsed_text}")
+        data = data.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
 
         json_data = json.loads(data)
 
@@ -121,15 +144,11 @@ def main():
         name = json_data['Nome']
         destin = json_data['Destinatari']
         classi = json_data['Classi']
-        text = llm(llm_client, model, llm_prefix, f"""
-        TEXT
+        text = llm(llm_client, model, llm_prefix, f"{text_prefix}\n{parsed_text}")
 
-        {parsed_text}
-        """)
-
-        if num > 0:
+        if num > 0:  # CIRCOLARI
             database.add_row(circolari_name, [hash_, num, name, date, str(destin), str(classi), text])
-        else:
+        else:  # COMUNICAZIONI
             database.add_row(comunicazioni_name, [hash_, name, date, str(destin), str(classi), text])
 
     hashes = [hash_ for (_, hash_) in file_hashes]
