@@ -98,7 +98,7 @@ def main():
     try:
         llm_prefix = prefix['#PREFIX']
         json_prefix = prefix['#JSON_PREFIX']
-        text_prefix = prefix['#JSON_PREFIX']
+        text_prefix = prefix['#TEXT_PREFIX']
     except KeyError as e:
         raise KeyError(f"Check for the keyword {str(e)} in the prefix file")
 
@@ -147,9 +147,9 @@ def main():
         text = llm(llm_client, model, llm_prefix, f"{text_prefix}\n{parsed_text}")
 
         if num > 0:  # CIRCOLARI
-            database.add_row(circolari_name, [hash_, num, name, date, str(destin), str(classi), text])
+            database.add_row(circolari_name, [hash_, num, name, date, json.dumps(destin), json.dumps(classi), text])
         else:  # COMUNICAZIONI
-            database.add_row(comunicazioni_name, [hash_, name, date, str(destin), str(classi), text])
+            database.add_row(comunicazioni_name, [hash_, name, date, json.dumps(destin), json.dumps(classi), text])
 
     hashes = [hash_ for (_, hash_) in file_hashes]
 
