@@ -48,9 +48,30 @@ class SqliteDB:
 
         return id_
 
+    def get_all_rows(self, table_name, id_names):
+        all_id = []
+        columns_str = ', '.join(id_names)
+
+        self.db_cursor.execute(f"SELECT {columns_str} FROM {table_name}")
+
+        rows = self.db_cursor.fetchall()
+        for row in rows:
+            all_id.append(list(row))
+
+        return all_id
+
     def add_row(self, table_name, values):
         self.db_cursor.execute(f"INSERT INTO {table_name} VALUES ({','.join('?' for _ in values)})",
                                values)
 
     def remove_row(self, table_name, id_name, id_value):
         self.db_cursor.execute(f"DELETE FROM {table_name} WHERE {id_name} = ?", (id_value,))
+
+    def get_data_at_id(self, table_name, id_row_name, id_value, data_row_name):
+        self.db_cursor.execute(f"SELECT {data_row_name} FROM {table_name} WHERE {id_row_name} = ?", (id_value,))
+
+        result = self.db_cursor.fetchone()
+        if result:
+            return result[0]
+        else:
+            return None

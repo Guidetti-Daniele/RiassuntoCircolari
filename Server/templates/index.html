@@ -1,146 +1,50 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riassunti circolari</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riassunto Circolari</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="title-bar">
+      <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo Ivan Piana" style="height: 40px; width: auto;" />
+      <span>Riassunto Circolari</span>
+    </div>
 
-    <!-- Bootstrap CSS -->
-    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='bootstrap/css/card.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='bootstrap/css/text.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='bootstrap/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
-
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
-</head>
-<body style="background-color: #212121;">
-
-<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #171717;">
     <div class="container">
-        <div class="header clearfix">
-            <h3 class="text-muted" style="color: #f8f9fa; position: relative;">
-                Riassunti circolari
-                <img width="70px" height="70px" src="{{ url_for('static', filename='icon.png') }}"
-                     style="position: absolute; right: 10px; top: -25px;">
-            </h3>
-        </div>
-    </div>
-</nav>
+      <select id="recipient" class="dropdown">
+        <option value="">Destinatario</option>
+        <!-- Options will be filled with magic and JSON -->
+      </select>
 
-<div class="container">
-    <div class="buttons">
-        <div class="container">
+      <select id="class" class="dropdown">
+        <option value="">Classe</option>
+        <!-- More magic, more JSON -->
+      </select>
 
-            <!-- DESTINATARIO -->
+      <select id="type" class="dropdown">
+        <option value="">Tipo</option>
+        <option value="circolare">Circolare</option>
+        <option value="comunicazione">Comunicazione</option>
+      </select>
 
-            <div class="card box-shadow card-box">
-                <div class="card-header">
-                    <h3 class="title-card">Destinatario</h3>
-                </div>
-                <div class="card-body">
+      <select id="document" class="dropdown">
+        <option value="">Documento</option>
+        <!-- Enchanted options, summoned with JSON -->
+      </select>
 
-                    <div class="badge bg-primary pull-left" style="background-color: #212121; width: calc(100% - 50px); height: 45px;">
-                        <h4 class="text-badge" id="selected-dest">Nessun destinatario selezionato</h4>
-                    </div>
-
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="get_dest();">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" id="dest-menu">
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-            <br><br>
-
-            <!-- CLASSE -->
-
-            <div class="card box-shadow card-box">
-                <div class="card-header">
-                    <h3 class="title-card">Classe</h3>
-                </div>
-                <div class="card-body">
-
-                    <div class="badge bg-primary pull-left" style="background-color: #212121; width: calc(100% - 50px); height: 45px;">
-                        <h4 class="text-badge" id="selected-class">Nessuna classe selezionata</h4>
-                    </div>
-
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="get_class();">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" id="class-menu">
-                            <!-- li role="separator" class="divider"></li -->
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-            <br><br>
-
-            <!-- CIRCOLARE / COMUNICAZIONE -->
-
-            <div class="card box-shadow card-box">
-                <div class="card-header">
-                    <h3 class="title-card">Circolare</h3>
-                    <div class="btn-group title-dropdown pull-right">
-                        <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Circolare</a>
-                            </li>
-                            <li><a href="#">Comunicazione</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-body">
-
-                    <div class="badge bg-primary pull-left" style="background-color: #212121; width: calc(100% - 50px); height: 45px;">
-                        <h4 class="text-badge">...</h4>
-                    </div>
-
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">test</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
+      <!-- The button, a catalyst for action -->
+      <button id="fetchTextButton">Riassumi</button>
+      <!-- The container for our Markdown display, now free to expand -->
+      <div id="markdownDisplay" style="min-height: 200px; overflow-y: auto; background-color: #f9f9f9; padding: 10px; border: 1px solid #ccc; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);">
+        <!-- Here shall the transmuted text appear, as if by magic, growing with each line added -->
+      </div>
     </div>
 
-
-</div>
-
-<!-- Bootstrap JavaScript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='bootstrap/ie10-viewport-bug-workaround.js') }}"></script>
-
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-
-</body>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </body>
 </html>
