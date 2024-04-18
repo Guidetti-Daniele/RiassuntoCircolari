@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch the dropdown data as before
     fetchDropdownData('recipient', '/get-destin', 'Destinatario');
     fetchDropdownData('class', '/get-class', 'Classe');
     fetchDropdownData('type', '/get-types', 'Tipo');
@@ -9,21 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
     observeMarkdownChanges();
 });
 
-// A refined spell to monitor the chamber for changes
 function updateMarkdownDisplay() {
     var markdownDisplay = document.getElementById('markdownDisplay');
     if (markdownDisplay.textContent.trim() === '') {
-        // If empty, we mark it as such
         markdownDisplay.classList.add('empty');
     } else {
-        // If not, we remove the mark of emptiness
         markdownDisplay.classList.remove('empty');
     }
 }
 
 function observeMarkdownChanges() {
     var markdownDisplay = document.getElementById('markdownDisplay');
-    // Our observer remains vigilant, but we ensure it watches with wisdom
     var observer = new MutationObserver(updateMarkdownDisplay);
     observer.observe(markdownDisplay, { childList: true, subtree: true, characterData: true });
 }
@@ -55,7 +50,6 @@ function fetchDropdownData(elementId, endpoint, not_selected_text) {
 }
 
 function fetchDocumentData(elementId, endpoint, data) {
-    // Constructing a query string from our data object
     const queryString = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
     fetch(`${endpoint}?${queryString}`, {
         method: 'GET',
@@ -73,7 +67,7 @@ function fetchDocumentData(elementId, endpoint, data) {
             dropdown.add(separator);
 
             data.forEach(item => {
-                const option = new Option(item[1], item[0]); // Assuming the format [value, name]
+                const option = new Option(item[1], item[0]);
                 dropdown.add(option);
             });
         })
@@ -81,7 +75,6 @@ function fetchDocumentData(elementId, endpoint, data) {
 }
 
 function setupDocumentDropdown() {
-    // Listen to changes in 'type', 'recipient', and 'class' to update document options
     const triggers = ['type', 'recipient', 'class'];
     triggers.forEach(trigger => {
         document.getElementById(trigger).addEventListener('change', function () {
@@ -89,7 +82,6 @@ function setupDocumentDropdown() {
             const recipient = document.getElementById('recipient').value;
             const class_ = document.getElementById('class').value;
 
-            // Only proceed if all necessary selections are made
             if (type && recipient && class_) {
                 const data = { dest: recipient, class: class_, type: type };
                 fetchDocumentData('document', '/get-circ', data);
@@ -107,8 +99,8 @@ document.getElementById('fetchTextButton').addEventListener('click', function ()
             .then(response => response.json())
             .then(data => {
                 const text = data || 'Errore';
-                const markdown = marked.parse(text); // Transmuting text to Markdown
-                document.getElementById('markdownDisplay').innerHTML = markdown; // Revealing it within our display
+                const markdown = marked.parse(text);
+                document.getElementById('markdownDisplay').innerHTML = markdown;
             })
             .catch(error => console.error('Errore', error));
     } else {
