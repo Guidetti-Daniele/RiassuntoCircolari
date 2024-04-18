@@ -1,184 +1,121 @@
 body {
     font-family: 'Nunito', sans-serif;
     background-color: #323539;
-    /* A lighter shade, akin to twilight's last gleaming */
     color: #E3E5E8;
-    /* A softer white, like moonlight through mist */
     display: flex;
     justify-content: center;
     align-items: center;
-    /*height: 100vh;*/
     padding-top: 60px;
-    /* The exact measure may vary */
 }
 
 .title-bar {
     height: 60px;
-    /* O quanto basta per il tuo regno */
     background-color: #2C3E50;
-    /* Profondo e riflessivo */
     color: #FFFFFF;
-    /* Per contrasto e chiarezza */
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    /* La chiave per allineare il testo a destra */
     padding: 0 0px;
-    /* Un po' di respiro ai lati, da entrambi i lati ora */
     position: fixed;
-    /* Fissata, come le stelle nel cielo */
     top: 0;
-    /* In cima al mondo, dove merita di essere */
     left: 0;
-    /* Dall'inizio del tuo regno digitale */
     width: 100%;
-    /* Estendendosi per tutto il regno visibile */
     z-index: 1000;
-    /* Elevata sopra tutti gli altri elementi */
 }
 
 .title-bar img {
     height: 50px;
-    /* L'immagine, adagiata comodamente all'interno della nostra barra */
     margin-left: auto;
-    /* Questo incantesimo spinge l'immagine verso il lato opposto del testo */
     margin-right: 50px;
-    /* Uno spazio piccolo, perché il testo non desidera avvicinarsi troppo */
-    transform: scale(1); /* Il nostro stato iniziale, solido e imperturbabile */
-    transition: transform 0.3s ease; /* Il segreto per un movimento sia in entrata che in uscita, lento e melodioso */
+    transform: scale(1);
+    transition: transform 0.3s ease;
 }
 
 .title-bar span {
     font-weight: 700;
-    /* Coraggioso e audace */
     font-size: 24px;
-    /* Chiaramente visibile da lontano */
     margin-right: auto;
-    /* Assicura che il testo rimanga ancorato a destra */
-    transform: scale(1); /* Il nostro stato iniziale, solido e imperturbabile */
-    transition: transform 0.3s ease; /* Il segreto per un movimento sia in entrata che in uscita, lento e melodioso */
+    transform: scale(1);
+    transition: transform 0.3s ease;
 }
 
 .title-bar img:hover,
 .title-bar span:hover {
     transform: scale(1.1);
-    /* Un piccolo saluto quando viene notato */
     transition: transform 0.3s ease;
-    /* Qui giace il segreto di una trasformazione lenta e armoniosa */
+
 }
 
 .container {
     width: 900px;
     background-color: #2E3134;
-    /* A gentle night, lighter than before */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    /* A deeper shadow for a subtler depth */
 }
 
-/* Adjusting the scope of our enchantment to ensure the text fades as desired */
 .dropdown {
     position: relative;
-    /* Reiterating its claim as a realm unto itself */
     overflow: hidden;
-    /* The decree that none shall pass beyond its borders */
     width: 100%;
     padding: 12px 34px 12px 12px;
-    /* Adjusting padding to ensure space for the fading effect */
     margin-bottom: 20px;
     background-color: #AAB2B8;
-    /* As the sky at dawn, light and welcoming */
     color: #2C2F33;
-    /* Dark as the night, for clarity and contrast */
     border: 1px solid #80868B;
-    /* Defined edges, a boundary marked */
     border-radius: 8px;
-    /* Soft corners, as in dreams */
     cursor: pointer;
     appearance: none;
-    /* Banishing the old styles to the void */
     -webkit-appearance: none;
     -moz-appearance: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* A hint of depth, as if by shadow's touch */
     font-size: 16px;
-    /* The voice of the text, clear and elegant */
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    /* The grace of movement, smooth and subtle */
     background-image: url('data:image/svg+xml;utf8,<svg fill="%232C2F33" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    /* The arrow, sharp and sure */
     background-repeat: no-repeat;
     background-position: right 10px center;
-    /* Its place assured, a sentinel watching */
     background-size: 24px;
-    /* Fitting, neither too large nor too small */
 }
 
-
-/* To ensure the options within unfold with grace and beauty */
 .dropdown option {
     background-color: #8394A9;
-    /* A lighter veil, under which choices slumber */
     color: #ffffff;
-    /* Text that shines like stars against the twilight */
     padding: 8px 10px;
-    /* A comfort, ensuring each choice is a pleasure to select */
     font-size: 16px;
-    /* A decree that each option shall be clear and bold */
     border-bottom: 1px solid #50575E;
-    /* A subtle division, like shadows at dusk */
 }
 
-/* Enhancing the dropdown with a hover spell, to elevate its presence */
 .dropdown:hover {
     border-color: #7289DA;
-    /* A border that captures the twilight */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    /* Shadows deepening, as if touched by the setting sun */
 }
 
-/* A focus charm, to outline the dropdown's importance when it commands attention */
 .dropdown:focus {
     outline: none;
-    /* Away with the harsh outlines of old */
     border-color: #7289DA;
-    /* A border, now glowing with purpose */
     box-shadow: 0 0 0 3px rgba(114, 137, 218, 0.5);
-    /* A soft glow, a halo of light, marking the chosen */
 }
 
-/* Enchanting the dropdown's open menu */
 .dropdown::-ms-expand {
     display: none;
-    /* Away with the default expander for our friends using Microsoft's gardens */
 }
 
-/* A potion for the WebKit browsers, to style the focus within */
 .dropdown:focus::-webkit-input-placeholder {
     color: transparent;
 }
 
-/* For the options to dance gracefully beneath the cursor */
 .dropdown option:hover,
 .dropdown option:focus {
     background-color: #6D7891;
-    /* A deeper shade of intrigue for the hovered option */
     color: #E3E5E8;
-    /* A light that guides the choice */
 }
 
-/* A charm to ensure our options are a delight to scroll through */
 .dropdown option {
     padding: 8px 10px;
-    /* A cushion of space, for comfort as the eye roves and the hand selects */
     font-size: 16px;
-    /* A size that whispers of importance, yet does not shout */
     border-bottom: 1px solid #50575E;
-    /* A subtle line, marking the end of one choice and the beginning of another */
 }
 
-/* A spell for the scroll, ensuring it glides smooth as the river of time */
 .dropdown::-webkit-scrollbar {
     width: 12px;
 }
@@ -193,167 +130,113 @@ body {
     border: 3px solid #2E3134;
 }
 
-/* And for the thumb, a hover enchantment, a whisper of interaction */
 .dropdown::-webkit-scrollbar-thumb:hover {
     background-color: #5B6D8A;
 }
 
 .dropdown select {
     -webkit-appearance: none;
-    /* Again, we dispel the old forms */
     appearance: none;
     width: 100%;
     border: none;
-    /* No borders here, within the realm of the dropdown */
     background: transparent;
-    /* Clear as the unseen, allowing the dropdown's own background to shine */
     color: #2C2F33;
-    /* In keeping with our scheme, dark against the light */
     font-size: 16px;
-    /* Clear, legible, as it should be */
     position: absolute;
-    /* To ensure it aligns as we desire */
     top: 0;
     left: 0;
     padding: 12px;
-    /* To match the dropdown's own, ensuring harmony */
     height: 100%;
     width: 100%;
     overflow: hidden;
-    /* No escape for the text, it shall fade */
 }
 
-/* The incantation now refined, to ensure the text indeed fades into the shadow of the arrow */
 .dropdown::after {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
-    /* Adjusted to sit neatly beside the arrow */
     width: 30px;
-    /* A span sufficient for the fade */
     height: 100%;
     background: linear-gradient(to left, #AAB2B8 0%, transparent 100%);
-    /* The gradient, from solid to unseen */
     pointer-events: none;
-    /* It shall not interfere with the clicking */
 }
 
 #markdownDisplay {
     color: #000;
-    /* From whispers in the shadows to tales by the fireside */
 }
 
 #markdownDisplay {
     padding: 10px;
-    /* A cushion, yes, but measured just so */
     text-align: left;
-    /* For tales are best told straight from the start */
 }
 
 #markdownDisplay * {
     margin-left: 0;
-    /* Ensuring that all within the container heed this alignment */
     text-indent: 0;
-    /* Banishing any whisper of an indent */
 }
 
 ul,
 ol {
     padding-left: 20px;
-    /* Adjust this value to tame the space consumed by lists */
 }
 
 pre,
 code {
     tab-size: 4;
-    /* A reduction in the width of tab characters */
 }
 
-/* A continuation of our spell for the button */
 button {
     background-color: #AAB2B8;
-    /* A hue as deep as the twilight sky */
     color: #000;
-    /* Letters as soft as moonlight through mist */
     border: 1px solid #80868B;
-    /* Defined edges, a boundary marked */
     padding: 12px 34px;
-    /* A cushion, ensuring each click is a comfort */
     font-size: 16px;
-    /* The voice of the button, clear and elegant */
     border-radius: 8px;
-    /* Soft corners, as in dreams */
     cursor: pointer;
-    /* A sign of action, beckoning the user's touch */
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
-    /* A subtle shift, like shadows at twilight */
     display: block;
-    /* To ensure it takes the stage alone */
     margin: 0 auto;
-    /* The magic that centers our star on the stage */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* A hint of depth, as if by shadow's touch */
 }
 
 button:hover {
     background-color: #6D7891;
-    /* A deeper shade, like the sky at dusk, inviting */
 }
 
 button:focus {
     outline: none;
-    /* Away with the jarring rings of focus past */
     box-shadow: 0 0 0 3px rgba(114, 137, 218, 0.5);
-    /* A glow, marking the chosen */
 }
 
 #markdownDisplay {
     min-height: 200px;
     overflow-y: auto;
-    /* A scroll for the stories that grow too tall */
     background-color: #f9f9f9;
-    /* A canvas light and bright */
     padding: 10px;
-    /* A cushion for your content, that it might breathe */
     border: 1px solid #ccc;
-    /* A line drawn, defining where the tale begins and ends */
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    /* A whisper of depth, as if the words might leap from the page */
     font-family: 'Nunito', sans-serif;
-    /* Ensuring the tale is told in a voice most clear and pleasing */
     color: #2C2F33;
-    /* The ink as dark as night, for contrast against the light */
     border-radius: 8px;
-    /* Softened edges, for a tale should be gentle to the touch */
     margin: 20px 0;
-    /* Space above and below, that it might not feel crowded */
 }
 
 #markdownDisplay {
     position: relative;
-    /* A firm grounding, the stage is set */
 }
 
 #markdownDisplay::before {
     content: "Cliccare sul pulsante Riassumi per generare il riassunto";
     color: #ccc;
-    /* As whispers in the moonlight */
     position: absolute;
-    /* Unbound by the earthly ties, yet anchored to the stage */
     top: 50%;
-    /* Centered, as a heart within the chest */
     left: 50%;
-    /* Balanced, as day and night at the equinox */
     transform: translate(-50%, -50%);
-    /* Precisely positioned, a ghost amongst the living */
     pointer-events: none;
-    /* Untouched and untouchable, a specter's grace */
     display: none;
-    /* Invisible, awaiting the call to the void */
 }
 
 #markdownDisplay.empty::before {
     display: block;
-    /* Summoned forth when the stage is bare */
 }
