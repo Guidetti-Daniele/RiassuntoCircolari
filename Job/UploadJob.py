@@ -1,3 +1,5 @@
+import openai
+
 from Sqlite_db import SqliteDB
 from PDF_Parsing import parse_pdf
 from openai import OpenAI
@@ -135,23 +137,37 @@ def main():
 
         date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
 
-        data = llm(llm_client, model, llm_prefix, f"{json_prefix}\n{parsed_text}")
-        data = data.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
+        try:
+            database = SqliteDB(args.conn_str)
 
-        json_data = json.loads(data)
+            database.init_table(circolari_name, circolari_rows)
+            database.init_table(comunicazioni_name, comunicazioni_rows)
 
-        num = json_data['Numero']
-        name = json_data['Nome']
-        destin = json_data['Destinatari']
-        classi = json_data['Classi']
-        text = llm(llm_client, model, llm_prefix, f"{text_prefix}\n{parsed_text}")
+            data = llm(llm_client, model, llm_prefix, f"{json_prefix}\n{parsed_text}")
+            data = data.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
 
-        if num > 0:  # CIRCOLARI
-            database.add_row(circolari_name, [hash_, num, name, date, json.dumps(destin), json.dumps(classi), text])
-        else:  # COMUNICAZIONI
-            database.add_row(comunicazioni_name, [hash_, name, date, json.dumps(destin), json.dumps(classi), text])
+            json_data = json.loads(data)
+
+            num = json_data['Numero']
+            name = json_data['Nome']
+            destin = json_data['Destinatari']
+            classi = json_data['Classi']
+            text = llm(llm_client, model, llm_prefix, f"{text_prefix}\n{parsed_text}")
+
+            if num > 0:  # CIRCOLARI
+                database.add_row(circolari_name, [hash_, num, name, date, json.dumps(destin), json.dumps(classi), text])
+            else:  # COMUNICAZIONI
+                database.add_row(comunicazioni_name, [hash_, name, date, json.dumps(destin), json.dumps(classi), text])
+
+            database.close_connection()
+        except (openai.RateLimitError, openai.BadRequestError) as e:
+            print(e)
 
     hashes = [hash_ for (_, hash_) in file_hashes]
+
+    database = SqliteDB(args.conn_str)
+    database.init_table(circolari_name, circolari_rows)
+    database.init_table(comunicazioni_name, comunicazioni_rows)
 
     # CIRCOLARI
     for circ_hash in database.get_all_id(circolari_name, list(circolari_rows.keys())[0]):
