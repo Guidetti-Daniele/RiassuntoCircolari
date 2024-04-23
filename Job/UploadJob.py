@@ -1,13 +1,21 @@
-import openai
-
-from Sqlite_db import SqliteDB
-from PDF_Parsing import parse_pdf
+from Server_db_API import ServerDbAPI
 from openai import OpenAI
+from PyPDF2 import PdfReader
 import argparse
 import os
-import time
+import datetime
 import json
 import hashlib
+
+
+def parse_pdf(file_path):
+    reader = PdfReader(file_path)
+
+    all_text = ''
+    for page in reader.pages:
+        all_text += page.extract_text()
+
+    return all_text
 
 
 def get_hashes(path, exclude):
@@ -73,8 +81,10 @@ def main():
 
     # Path to the folder containing all the files
     arg_parse.add_argument("-folder_path", dest="folder_path", required=True)
-    # Path to the SQLite DB
-    arg_parse.add_argument("-db_connection_string", dest="conn_str", required=True)
+    # Base URL for the DB API, for example http://127.0.0.1:8080
+    arg_parse.add_argument("-base_url", dest="api_url", required=True)
+    # Key for the DB API
+    arg_parse.add_argument("-db_api_key", dest="db_api_key", required=True)
     # Name for the prefix file located in the files folder
     arg_parse.add_argument("-prefix_file_name", dest="prefix_file", required=True)
 
@@ -83,7 +93,15 @@ def main():
     # OpenAI LLM model
     arg_parse.add_argument("-openai_model", dest="model", required=True)
 
+    # OpenAI Input pricing per million tokens - to calculate cost of every processed document - not required
+    arg_parse.add_argument("-model_pricing_input", dest="model_pricing_input", required=False)
+    # OpenAI Output pricing per million tokens - to calculate cost of every processed document - not required
+    arg_parse.add_argument("-model_pricing_output", dest="model_pricing_output", required=False)
+
     args = arg_parse.parse_args()
+
+    pricing_input = args.model_pricing_input
+    pricing_output = args.model_pricing_output
 
     folder_path = args.folder_path
     prefix_file = args.prefix_file  # this file contains the LLM prefix
@@ -104,47 +122,22 @@ def main():
     except KeyError as e:
         raise KeyError(f"Check for the keyword {str(e)} in the prefix file")
 
-    database = SqliteDB(args.conn_str)
-
-    circolari_name = "circolari"
-    circolari_rows = {
-        "hash": "TEXT PRIMARY KEY",
-        "numero": "INTEGER",
-        "nome": "TEXT",
-        "data": "DATE",
-        "destinatari": "TEXT",
-        "classi": "TEXT",
-        "riassunto": "TEXT"
-    }
-    comunicazioni_name = "comunicazioni"
-    comunicazioni_rows = {
-        "hash": "TEXT PRIMARY KEY",
-        "nome": "TEXT",
-        "data": "DATE",
-        "destinatari": "TEXT",
-        "classi": "TEXT",
-        "riassunto": "TEXT"
-    }
-
-    database.init_table(circolari_name, circolari_rows)
-    database.init_table(comunicazioni_name, comunicazioni_rows)
+    database = ServerDbAPI(args.api_url, args.db_api_key)
 
     file_hashes = get_hashes(folder_path, prefix_file)
-    missing_files = database.get_missing_values(file_hashes, "hash", circolari_name, comunicazioni_name)
+    missing_files = database.get_missing_values(file_hashes)
 
     for (path, hash_) in missing_files:
-        parsed_text = parse_pdf(path, "Tabella")
+        parsed_text = parse_pdf(path)
 
-        date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
+        # date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         try:
-            database = SqliteDB(args.conn_str)
+            json_query = f"{json_prefix}\n{parsed_text}"
 
-            database.init_table(circolari_name, circolari_rows)
-            database.init_table(comunicazioni_name, comunicazioni_rows)
-
-            data = llm(llm_client, model, llm_prefix, f"{json_prefix}\n{parsed_text}")
-            data = data.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
+            data_1 = llm(llm_client, model, llm_prefix, json_query)
+            data = data_1.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
 
             json_data = json.loads(data)
 
@@ -152,34 +145,37 @@ def main():
             name = json_data['Nome']
             destin = json_data['Destinatari']
             classi = json_data['Classi']
-            text = llm(llm_client, model, llm_prefix, f"{text_prefix}\n{parsed_text}")
+
+            text_query = f"{text_prefix}\n{parsed_text}"
+
+            text = llm(llm_client, model, llm_prefix, text_query)
 
             if num > 0:  # CIRCOLARI
-                database.add_row(circolari_name, [hash_, num, name, date, json.dumps(destin), json.dumps(classi), text])
+                database.add_circ(hash_, num, name, date, json.dumps(destin), json.dumps(classi), text)
             else:  # COMUNICAZIONI
-                database.add_row(comunicazioni_name, [hash_, name, date, json.dumps(destin), json.dumps(classi), text])
+                database.add_comm(hash_, name, date, json.dumps(destin), json.dumps(classi), text)
 
-            database.close_connection()
-        except (openai.RateLimitError, openai.BadRequestError) as e:
+            if pricing_input and pricing_output:  # Calculate cost per document
+                input_price = (len(json_query) + len(text_query)) * (float(pricing_input) / 1000000)
+                output_price = (len(data_1) + len(text)) * (float(pricing_output) / 1000000)
+
+                print(f"{num} - {name} - {input_price + output_price}$")
+            else:
+                print(f"{num} - {name}")
+        except Exception as e:
             print(e)
 
     hashes = [hash_ for (_, hash_) in file_hashes]
 
-    database = SqliteDB(args.conn_str)
-    database.init_table(circolari_name, circolari_rows)
-    database.init_table(comunicazioni_name, comunicazioni_rows)
-
     # CIRCOLARI
-    for circ_hash in database.get_all_id(circolari_name, list(circolari_rows.keys())[0]):
+    for circ_hash in database.get_circ_hashes():
         if circ_hash not in hashes:
-            database.remove_row(circolari_name, list(circolari_rows.keys())[0], circ_hash)
+            database.delete_circ(circ_hash)
 
     # COMUNICAZIONI
-    for com_hash in database.get_all_id(comunicazioni_name, list(comunicazioni_rows.keys())[0]):
+    for com_hash in database.get_comm_hashes():
         if com_hash not in hashes:
-            database.remove_row(comunicazioni_name, list(circolari_rows.keys())[0], com_hash)
-
-    database.close_connection()
+            database.delete_comm(com_hash)
 
 
 if __name__ == "__main__":

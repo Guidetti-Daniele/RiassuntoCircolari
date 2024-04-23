@@ -1,50 +1,23 @@
+from Parameters import parameters
 import argparse
 import json
 from flask import Flask, render_template, request
+from ServerAPI import api
 from Sqlite_db import SqliteDB
 
-circolari_name = "circolari"
-circolari_rows = {
-    "hash": "TEXT PRIMARY KEY",
-    "numero": "INTEGER",
-    "nome": "TEXT",
-    "data": "DATE",
-    "destinatari": "TEXT",
-    "classi": "TEXT",
-    "riassunto": "TEXT",
-}
-comunicazioni_name = "comunicazioni"
-comunicazioni_rows = {
-    "hash": "TEXT PRIMARY KEY",
-    "nome": "TEXT",
-    "data": "DATE",
-    "destinatari": "TEXT",
-    "classi": "TEXT",
-    "riassunto": "TEXT",
-}
+app = Flask(__name__)
+app.register_blueprint(api)
 
-not_to_add = ["1#", "2#", "3#", "4#", "5#", "##"]
-
-all_class = "Tutte le classi"
-all_classes_db = "##"
-all_dest = "Tutti"
-circ_type = {
-    circolari_name: "Circolari",
-    comunicazioni_name: "Comunicazioni"
-}
+connection_string = None
 
 
 def init_db(database):
-    database.init_table(circolari_name, circolari_rows)
-    database.init_table(comunicazioni_name, comunicazioni_rows)
+    database.init_table(parameters.circolari_name, parameters.circolari_rows)
+    database.init_table(parameters.comunicazioni_name, parameters.comunicazioni_rows)
 
 
 def sort_key(x):
     return x[1:] + x[0]
-
-
-app = Flask(__name__)
-connection_string = None
 
 
 @app.route("/")
@@ -54,18 +27,17 @@ def index():
 
 @app.route("/get-destin", methods=["GET"])
 def get_destin():
-    global connection_string
     database = SqliteDB(connection_string)
     init_db(database)
 
     all_circ = [
         json.loads(x)
-        for x in database.get_all_id(circolari_name, list(circolari_rows.keys())[4])
+        for x in database.get_all_id(parameters.circolari_name, list(parameters.circolari_rows.keys())[4])
     ]
     all_com = [
         json.loads(x)
         for x in database.get_all_id(
-            comunicazioni_name, list(comunicazioni_rows.keys())[3]
+            parameters.comunicazioni_name, list(parameters.comunicazioni_rows.keys())[3]
         )
     ]
 
@@ -77,30 +49,31 @@ def get_destin():
     dest_list = list(destin_set)
 
     dest_list.append("#separator#")
-    dest_list.append(all_dest)
+    dest_list.append(parameters.all_dest)
+
+    database.close_connection()
 
     return json.dumps(dest_list)
 
 
 @app.route("/get-types", methods=["GET"])
 def get_types():
-    return json.dumps(list(circ_type.values()))
+    return json.dumps(list(parameters.circ_type.values()))
 
 
 @app.route("/get-class", methods=["GET"])
 def get_class():
-    global connection_string
     database = SqliteDB(connection_string)
     init_db(database)
 
     all_circ = [
         json.loads(x)
-        for x in database.get_all_id(circolari_name, list(circolari_rows.keys())[5])
+        for x in database.get_all_id(parameters.circolari_name, list(parameters.circolari_rows.keys())[5])
     ]
     all_com = [
         json.loads(x)
         for x in database.get_all_id(
-            comunicazioni_name, list(comunicazioni_rows.keys())[4]
+            parameters.comunicazioni_name, list(parameters.comunicazioni_rows.keys())[4]
         )
     ]
 
@@ -108,7 +81,7 @@ def get_class():
 
     for x in all_circ + all_com:
         for y in x:
-            if y not in not_to_add:
+            if y not in parameters.not_to_add:
                 class_set.add(y)
 
     class_list = list(class_set)
@@ -124,7 +97,9 @@ def get_class():
             class_list_separated.append("#separator#")
 
     class_list_separated.append("#separator#")
-    class_list_separated.append(all_class)
+    class_list_separated.append(parameters.all_class)
+
+    database.close_connection()
 
     return json.dumps(class_list_separated)
 
@@ -138,7 +113,6 @@ def get_key(data, value):
 
 @app.route("/get-circ", methods=["GET"])
 def get_circ():
-    global connection_string
     database = SqliteDB(connection_string)
     init_db(database)
 
@@ -151,12 +125,13 @@ def get_circ():
     class_ = request.args.get('class', '')
     type_ = request.args.get('type', '')
 
-    table_name, num = get_key(circ_type, type_)
+    table_name, num = get_key(parameters.circ_type, type_)
     if not table_name:
         print(f"Table not in list")
         return "[]"
 
-    rows_to_get = list(circolari_rows.keys())[:-1] if num == 0 else list(comunicazioni_rows.keys())[:-1]
+    rows_to_get = list(parameters.circolari_rows.keys())[:-1] if num == 0 else list(
+        parameters.comunicazioni_rows.keys())[:-1]
     rows = database.get_all_rows(table_name, rows_to_get)
 
     result_rows = []
@@ -167,40 +142,44 @@ def get_circ():
 
         in_classes = False
         for value in row_class_list:
-            if ('#' in value) and (class_[0] in value):
+            if (('#' in value) and (class_[0] in value)) or (
+                    (len(value) < 3 or len(class_) < 3) and value[:2] == class_[:2]):
                 in_classes = True
                 break
 
-        if ((dest in row_dest_list) or (dest == all_dest)) and (
-                (class_ in row_class_list) or (class_ == all_class) or (
-                all_classes_db in row_class_list) or in_classes):
+        if ((dest in row_dest_list) or (dest == parameters.all_dest)) and (
+                (class_ in row_class_list) or (class_ == parameters.all_class) or (
+                parameters.all_classes_db in row_class_list) or in_classes):
             result_rows.append(row)
 
-    sorted_result = sorted(result_rows, key=lambda x: x[3 if num == 0 else 2])
+    sorted_result = sorted(result_rows, key=lambda x: x[3 if num == 0 else 2], reverse=True)
     return_rows = [[x[0], f"{x[1]} - {x[2]}" if num == 0 else x[1]] for x in sorted_result]
+
+    database.close_connection()
 
     return json.dumps(return_rows)
 
 
 @app.route("/get-text", methods=["GET"])
 def get_text():
-    global connection_string
     database = SqliteDB(connection_string)
     init_db(database)
 
     hash_ = request.args.get('hash', '')
     type_ = request.args.get('type', '')
 
-    table_name, num = get_key(circ_type, type_)
+    table_name, num = get_key(parameters.circ_type, type_)
     if not table_name:
         print(f"Table not in list")
         return "[]"
 
-    text_row_name = list(circolari_rows.keys())[-1] if num == 0 else list(comunicazioni_rows.keys())[-1]
-    hash_row_name = list(circolari_rows.keys())[0] if num == 0 else list(comunicazioni_rows.keys())[0]
+    text_row_name = list(parameters.circolari_rows.keys())[-1] if num == 0 else \
+        list(parameters.comunicazioni_rows.keys())[-1]
+    hash_row_name = list(parameters.circolari_rows.keys())[0] if num == 0 else \
+        list(parameters.comunicazioni_rows.keys())[0]
     text = database.get_data_at_id(table_name, hash_row_name, hash_, text_row_name)
 
-    print(json.dumps(text))
+    database.close_connection()
 
     return json.dumps(text)
 
@@ -209,7 +188,12 @@ if __name__ == "__main__":
     arg_parse = argparse.ArgumentParser()
     # Path to the SQLite DB
     arg_parse.add_argument("-db_connection_string", dest="conn_str", required=True)
+    # Path to the SQLite DB
+    arg_parse.add_argument("-parameters_file", dest="param_path", required=True)
     args = arg_parse.parse_args()
     connection_string = args.conn_str
 
-    app.run(host="0.0.0.0", port=8080, threaded=True, debug=True)
+    parameters.init(args.param_path)
+    parameters.connection_string = connection_string
+
+    app.run(host="0.0.0.0", port=8080, threaded=True)

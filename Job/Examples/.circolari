@@ -11,9 +11,13 @@ Devi specificare il contenuto di ogni circolare, il suo numero indicato in (Circ
 #JSON_PREFIX
 JSON
 Dati richiesti:
-Numero (Numero della circolare, se non specificato è -1),
-Nome (Nome della circolare),
-Destinatari (rispondi usando alcune tra queste parole come lista: "Studenti", "Docenti", "Genitori", "Personale"),
-Classi (Le classi che riguardano la circolare come lista, se tutte rispondi con ["##"], se la sezione non viene specificata rispondi con "n#" , dove n è il numero della classe)
+{
+"Numero": (Numero della circolare, se non specificato è -1),
+"Nome": (Nome della circolare),
+"Destinatari": (rispondi usando alcune tra queste parole come lista: "Studenti", "Docenti", "Genitori", "Personale"),
+"Classi": (Le classi che riguardano la circolare come lista, se tutte rispondi con ["##"], scrivi il numero della classe a cifre e non parole (Esempio: Quinta CT -> 5CT , IIRF -> 2RF), se la sezione non viene specificata rispondi con (ESEMPIO: classi quarte -> 4#) , NON rispondere in altri formati)
+}
+
+Se questi dati si ripetono uniscili tutti in un unico blocco dati
 #TEXT_PREFIX
 TEXT
