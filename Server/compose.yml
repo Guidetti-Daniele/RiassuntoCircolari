@@ -6,9 +6,6 @@ services:
     build: ./flask
     container_name: circolari_server
     restart: always
-    environment:
-      - DB_PATH=/app/database/db.sqlite
-      - PARAMETERS_PATH=/app/parameters/parameters.json
     volumes:
       - ./database/database.db:/app/database/db.sqlite:rw
       - ./config/parameters.json:/app/parameters/parameters.json
