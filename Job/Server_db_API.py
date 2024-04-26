@@ -1,4 +1,5 @@
 import requests
+import traceback
 
 
 class ServerDbAPI:
@@ -18,8 +19,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return []
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return []
 
         return response.json()['data']
@@ -35,8 +36,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return
 
     def add_comm(self, *row_data):
@@ -50,8 +51,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return
 
     def get_circ_hashes(self):
@@ -64,8 +65,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return []
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return []
 
         return response.json()['data']
@@ -80,8 +81,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return []
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return []
 
         return response.json()['data']
@@ -97,8 +98,8 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return
 
     def delete_comm(self, hash_):
@@ -112,6 +113,6 @@ class ServerDbAPI:
             if response.status_code != 200:
                 print(f"request status code {response.status_code}\n{response.text}")
                 return
-        except Exception as e:
-            print(f"Exception {str(e)}")
+        except Exception as ex:
+            traceback.print_exc()
             return

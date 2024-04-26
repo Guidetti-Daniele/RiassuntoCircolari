@@ -1,8 +1,8 @@
 import json
 import hashlib
 from flask import Blueprint, request
-from Sqlite_db import SqliteDB
-from Parameters import parameters
+from app.Sqlite_db import SqliteDB
+from app.Parameters import parameters
 
 api = Blueprint('api', __name__)
 

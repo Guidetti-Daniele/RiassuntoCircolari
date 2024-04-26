@@ -6,6 +6,7 @@ import os
 import datetime
 import json
 import hashlib
+import traceback
 
 
 def parse_pdf(file_path):
@@ -141,6 +142,8 @@ def main():
 
             json_data = json.loads(data)
 
+            print(data)
+
             num = json_data['Numero']
             name = json_data['Nome']
             destin = json_data['Destinatari']
@@ -162,8 +165,8 @@ def main():
                 print(f"{num} - {name} - {input_price + output_price}$")
             else:
                 print(f"{num} - {name}")
-        except Exception as e:
-            print(e)
+        except Exception:
+            traceback.print_exc()
 
     hashes = [hash_ for (_, hash_) in file_hashes]
 

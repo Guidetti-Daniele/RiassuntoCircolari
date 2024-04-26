@@ -1,14 +1,12 @@
-from Parameters import parameters
-import argparse
+from app.Parameters import parameters
 import json
 from flask import Flask, render_template, request
-from ServerAPI import api
-from Sqlite_db import SqliteDB
+from app.ServerAPI import api
+from app.Sqlite_db import SqliteDB
+
 
 app = Flask(__name__)
 app.register_blueprint(api)
-
-connection_string = None
 
 
 def init_db(database):
@@ -27,12 +25,14 @@ def index():
 
 @app.route("/get-destin", methods=["GET"])
 def get_destin():
-    database = SqliteDB(connection_string)
+    database = SqliteDB(parameters.connection_string)
     init_db(database)
 
     all_circ = [
         json.loads(x)
-        for x in database.get_all_id(parameters.circolari_name, list(parameters.circolari_rows.keys())[4])
+        for x in database.get_all_id(
+            parameters.circolari_name, list(parameters.circolari_rows.keys())[4]
+        )
     ]
     all_com = [
         json.loads(x)
@@ -63,12 +63,14 @@ def get_types():
 
 @app.route("/get-class", methods=["GET"])
 def get_class():
-    database = SqliteDB(connection_string)
+    database = SqliteDB(parameters.connection_string)
     init_db(database)
 
     all_circ = [
         json.loads(x)
-        for x in database.get_all_id(parameters.circolari_name, list(parameters.circolari_rows.keys())[5])
+        for x in database.get_all_id(
+            parameters.circolari_name, list(parameters.circolari_rows.keys())[5]
+        )
     ]
     all_com = [
         json.loads(x)
@@ -113,7 +115,7 @@ def get_key(data, value):
 
 @app.route("/get-circ", methods=["GET"])
 def get_circ():
-    database = SqliteDB(connection_string)
+    database = SqliteDB(parameters.connection_string)
     init_db(database)
 
     # data = json.loads(request.args.get('data', ''))
@@ -121,17 +123,20 @@ def get_circ():
     # class_ = data['class']
     # type_ = data['type']
 
-    dest = request.args.get('dest', '')
-    class_ = request.args.get('class', '')
-    type_ = request.args.get('type', '')
+    dest = request.args.get("dest", "")
+    class_ = request.args.get("class", "")
+    type_ = request.args.get("type", "")
 
     table_name, num = get_key(parameters.circ_type, type_)
     if not table_name:
         print(f"Table not in list")
         return "[]"
 
-    rows_to_get = list(parameters.circolari_rows.keys())[:-1] if num == 0 else list(
-        parameters.comunicazioni_rows.keys())[:-1]
+    rows_to_get = (
+        list(parameters.circolari_rows.keys())[:-1]
+        if num == 0
+        else list(parameters.comunicazioni_rows.keys())[:-1]
+    )
     rows = database.get_all_rows(table_name, rows_to_get)
 
     result_rows = []
@@ -142,18 +147,26 @@ def get_circ():
 
         in_classes = False
         for value in row_class_list:
-            if (('#' in value) and (class_[0] in value)) or (
-                    (len(value) < 3 or len(class_) < 3) and value[:2] == class_[:2]):
+            if (("#" in value) and (class_[0] in value)) or (
+                (len(value) < 3 or len(class_) < 3) and value[:2] == class_[:2]
+            ):
                 in_classes = True
                 break
 
         if ((dest in row_dest_list) or (dest == parameters.all_dest)) and (
-                (class_ in row_class_list) or (class_ == parameters.all_class) or (
-                parameters.all_classes_db in row_class_list) or in_classes):
+            (class_ in row_class_list)
+            or (class_ == parameters.all_class)
+            or (parameters.all_classes_db in row_class_list)
+            or in_classes
+        ):
             result_rows.append(row)
 
-    sorted_result = sorted(result_rows, key=lambda x: x[3 if num == 0 else 2], reverse=True)
-    return_rows = [[x[0], f"{x[1]} - {x[2]}" if num == 0 else x[1]] for x in sorted_result]
+    sorted_result = sorted(
+        result_rows, key=lambda x: x[3 if num == 0 else 2], reverse=True
+    )
+    return_rows = [
+        [x[0], f"{x[1]} - {x[2]}" if num == 0 else x[1]] for x in sorted_result
+    ]
 
     database.close_connection()
 
@@ -162,38 +175,29 @@ def get_circ():
 
 @app.route("/get-text", methods=["GET"])
 def get_text():
-    database = SqliteDB(connection_string)
+    database = SqliteDB(parameters.connection_string)
     init_db(database)
 
-    hash_ = request.args.get('hash', '')
-    type_ = request.args.get('type', '')
+    hash_ = request.args.get("hash", "")
+    type_ = request.args.get("type", "")
 
     table_name, num = get_key(parameters.circ_type, type_)
     if not table_name:
         print(f"Table not in list")
         return "[]"
 
-    text_row_name = list(parameters.circolari_rows.keys())[-1] if num == 0 else \
-        list(parameters.comunicazioni_rows.keys())[-1]
-    hash_row_name = list(parameters.circolari_rows.keys())[0] if num == 0 else \
-        list(parameters.comunicazioni_rows.keys())[0]
+    text_row_name = (
+        list(parameters.circolari_rows.keys())[-1]
+        if num == 0
+        else list(parameters.comunicazioni_rows.keys())[-1]
+    )
+    hash_row_name = (
+        list(parameters.circolari_rows.keys())[0]
+        if num == 0
+        else list(parameters.comunicazioni_rows.keys())[0]
+    )
     text = database.get_data_at_id(table_name, hash_row_name, hash_, text_row_name)
 
     database.close_connection()
 
     return json.dumps(text)
-
-
-if __name__ == "__main__":
-    arg_parse = argparse.ArgumentParser()
-    # Path to the SQLite DB
-    arg_parse.add_argument("-db_connection_string", dest="conn_str", required=True)
-    # Path to the SQLite DB
-    arg_parse.add_argument("-parameters_file", dest="param_path", required=True)
-    args = arg_parse.parse_args()
-    connection_string = args.conn_str
-
-    parameters.init(args.param_path)
-    parameters.connection_string = connection_string
-
-    app.run(host="0.0.0.0", port=8080, threaded=True)
