@@ -45,8 +45,4 @@ jobs:
           fetch-depth: 0
       - uses: docker/build-push-action@v1
         with:
-          context: Server/flask
-          file: Server/flask/Dockerfil
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          run: docker build /Server/flask --file ./Server/flask/Dockerfile --tag riassunto_circolari:latest
