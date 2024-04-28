@@ -43,6 +43,9 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
-      - uses: docker/build-push-action@v1
+      - uses: docker/build-push-action@v5
         with:
-          run: docker build /Server/flask --file ./Server/flask/Dockerfile --tag riassunto_circolari:latest
+          context: /Server/flask
+          file: /Server/flask/Dockerfile
+          push: true
+          tags: user/app:latest
