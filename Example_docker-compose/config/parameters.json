@@ -1,0 +1,37 @@
+{
+  "circolari_name": "circolari",
+  "circolari_rows": {
+    "hash": "TEXT PRIMARY KEY",
+    "numero": "INTEGER",
+    "nome": "TEXT",
+    "data": "DATE",
+    "destinatari": "TEXT",
+    "classi": "TEXT",
+    "riassunto": "TEXT"
+  },
+  "comunicazioni_name": "comunicazioni",
+  "comunicazioni_rows": {
+    "hash": "TEXT PRIMARY KEY",
+    "nome": "TEXT",
+    "data": "DATE",
+    "destinatari": "TEXT",
+    "classi": "TEXT",
+    "riassunto": "TEXT"
+  },
+  "not_to_add": [
+    "1#",
+    "2#",
+    "3#",
+    "4#",
+    "5#",
+    "##"
+  ],
+  "all_class": "Tutte le classi",
+  "all_classes_db": "##",
+  "all_dest": "Tutti",
+  "circ_type": {
+    "circolari": "Circolari",
+    "comunicazioni": "Comunicazioni"
+  },
+  "db_api_key_hash": "ddf5c7a9aa3b43aadb06c7683d43fe215aa739ef75b9d6f58c3879be263f4e72"
+}
