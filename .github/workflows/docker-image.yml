@@ -16,7 +16,7 @@ jobs:
           run:
             working-directory: './Server/flask'
         steps:
-          - id: 'lowercase name'
+          - id: string
             uses: ASzc/change-string-case-action@v2
             with:
               string: Luca2040
