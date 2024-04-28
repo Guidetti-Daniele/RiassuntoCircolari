@@ -28,5 +28,5 @@ jobs:
 
           - name: 'Build Inventory Image'
             run: |
-              docker build . --tag ghcr.io/Luca2040/riassunto_circolari:latest
+              docker build . --tag riassunto_circolari:latest
               docker push ghcr.io/Luca2040/riassunto_circolari:latest
