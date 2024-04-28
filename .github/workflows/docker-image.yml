@@ -46,7 +46,7 @@ jobs:
       - uses: docker/build-push-action@v1
         with:
           context: Server/flask
-          file: Server/flask/Dockerfile
+          file: Server/flask/Dockerfil
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
