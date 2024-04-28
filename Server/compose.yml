@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   circolari_server:
-    build: ./flask
+    image: ghcr.io/luca2040/riassunto_circolari:latest
     container_name: circolari_server
     restart: always
     volumes:
