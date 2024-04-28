@@ -26,8 +26,14 @@ jobs:
               username: ${{github.actor}}
               password: ${{secrets.GITHUB_TOKEN}}
 
+          - name: 'set lower case owner name'
+            run: |
+              echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+            env:
+              OWNER: '${{ github.repository_owner }}'
+
           - name: 'build image'
             run: |
-              docker build . --file Dockerfile --tag ghcr.io/Luca2040/riassunto_circolari:latest ./Server/flask
-              docker push ghcr.io/Luca2040/riassunto_circolari:latest
+              docker build . --file Dockerfile --tag ghcr.io/${{ OWNER_LC }}/riassunto_circolari:latest
+              docker push ghcr.io/${{ OWNER_LC }}/riassunto_circolari:latest
 
