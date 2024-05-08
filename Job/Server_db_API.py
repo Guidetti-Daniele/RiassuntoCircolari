@@ -1,5 +1,7 @@
-import requests
 import traceback
+
+import requests
+from requests.exceptions import HTTPError
 
 
 class ServerDbAPI:
@@ -14,14 +16,9 @@ class ServerDbAPI:
             'hashes': hashes
         }
 
-        try:
-            response = requests.get(self.base_url + '/get_missing_values', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return []
-        except Exception as ex:
-            traceback.print_exc()
-            return []
+        response = requests.get(self.base_url + '/get_missing_values', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
         return response.json()['data']
 
@@ -31,14 +28,9 @@ class ServerDbAPI:
             'data': list(row_data)
         }
 
-        try:
-            response = requests.put(self.base_url + '/add_circ', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return
-        except Exception as ex:
-            traceback.print_exc()
-            return
+        response = requests.put(self.base_url + '/add_circ', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
     def add_comm(self, *row_data):
         data = {
@@ -46,28 +38,18 @@ class ServerDbAPI:
             'data': list(row_data)
         }
 
-        try:
-            response = requests.put(self.base_url + '/add_comm', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return
-        except Exception as ex:
-            traceback.print_exc()
-            return
+        response = requests.put(self.base_url + '/add_comm', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
     def get_circ_hashes(self):
         data = {
             'key': self.key
         }
 
-        try:
-            response = requests.get(self.base_url + '/get_circ_hashes', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return []
-        except Exception as ex:
-            traceback.print_exc()
-            return []
+        response = requests.get(self.base_url + '/get_circ_hashes', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
         return response.json()['data']
 
@@ -76,14 +58,9 @@ class ServerDbAPI:
             'key': self.key
         }
 
-        try:
-            response = requests.get(self.base_url + '/get_comm_hashes', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return []
-        except Exception as ex:
-            traceback.print_exc()
-            return []
+        response = requests.get(self.base_url + '/get_comm_hashes', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
         return response.json()['data']
 
@@ -93,14 +70,9 @@ class ServerDbAPI:
             'hash': hash_
         }
 
-        try:
-            response = requests.delete(self.base_url + '/delete_circ', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return
-        except Exception as ex:
-            traceback.print_exc()
-            return
+        response = requests.delete(self.base_url + '/delete_circ', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
     def delete_comm(self, hash_):
         data = {
@@ -108,11 +80,6 @@ class ServerDbAPI:
             'hash': hash_
         }
 
-        try:
-            response = requests.delete(self.base_url + '/delete_comm', json=data)
-            if response.status_code != 200:
-                print(f"request status code {response.status_code}\n{response.text}")
-                return
-        except Exception as ex:
-            traceback.print_exc()
-            return
+        response = requests.delete(self.base_url + '/delete_comm', json=data)
+        if response.status_code != 200:
+            raise HTTPError(f"request status code {response.status_code}\n{response.text}")

@@ -1,4 +1,3 @@
-import os
 from app.Parameters import parameters
 from app.Server import app
 

@@ -1,0 +1,16 @@
+{
+  "config": {
+    "folder_path": "D:\\example\\circolari",
+    "api_url": "http://example",
+    "db_api_key": "example_key",
+    "api_key": "---key---",
+    "model": "gpt-4-turbo",
+    "model_pricing_input": 10,
+    "model_pricing_output": 30
+  },
+  "llm_prefix": {
+    "prefix": "Se la domanda inizia per JSON:{\nRispondi solamente con il formato json dei dati richiesti dall'utente.\n}\n\nSe la domanda inizia per TEXT:{\nAiuti le persone a guardare gli argomenti delle circolari del registro classeviva.\nLe tue risposte devono essere complete ma brevi e devono contenere tutte le informazioni importanti contenute nelle circolari, scrivendo in elenco puntato un riassunto completo per ogni circolare.\nDevi specificare il contenuto di ogni circolare, il suo numero indicato in (Circolare n.) e il suo nome, le tue risposte devono essere lunghe.\n}",
+    "json_prefix": "JSON\nDati richiesti:\n{\n\"Numero\": (Numero della circolare, se non specificato è -1),\n\"Nome\": (Nome della circolare),\n\"Destinatari\": (rispondi usando alcune tra queste parole come lista: \"Studenti\", \"Docenti\", \"Genitori\", \"Personale\"),\n\"Classi\": (Le classi che riguardano la circolare come lista, se tutte rispondi con [\"##\"], scrivi il numero della classe a cifre e non parole (Esempio: Quinta CT -> 5CT , IIRF -> 2RF), se la sezione non viene specificata rispondi con (ESEMPIO: classi quarte -> 4#) , NON rispondere in altri formati)\n}\n\nSe questi dati si ripetono uniscili tutti in un unico blocco dati",
+    "text_prefix": "TEXT"
+  }
+}

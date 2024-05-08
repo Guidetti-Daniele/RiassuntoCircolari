@@ -1,12 +1,14 @@
-from Server_db_API import ServerDbAPI
-from openai import OpenAI
-from PyPDF2 import PdfReader
-import argparse
-import os
 import datetime
-import json
 import hashlib
+import json
+import os
 import traceback
+import logging
+
+from PyPDF2 import PdfReader
+from openai import OpenAI
+
+from Server_db_API import ServerDbAPI
 
 
 def parse_pdf(file_path):
@@ -19,13 +21,13 @@ def parse_pdf(file_path):
     return all_text
 
 
-def get_hashes(path, exclude):
+def get_hashes(path, extension):
     hashes = []
     added_hashes = []
 
     for file in os.listdir(path):
         name = os.fsdecode(file)
-        if name != exclude:
+        if name.lower().endswith(extension):
             filepath = os.path.join(path, name)
 
             file_hash = hashlib.sha256()
@@ -78,71 +80,61 @@ def llm(client, model, prefix, query):
 
 
 def main():
-    arg_parse = argparse.ArgumentParser()
+    with open("files/config.json", "r") as config_file:
+        config = json.load(config_file)
 
-    # Path to the folder containing all the files
-    arg_parse.add_argument("-folder_path", dest="folder_path", required=True)
-    # Base URL for the DB API, for example http://127.0.0.1:8080
-    arg_parse.add_argument("-base_url", dest="api_url", required=True)
-    # Key for the DB API
-    arg_parse.add_argument("-db_api_key", dest="db_api_key", required=True)
-    # Name for the prefix file located in the files folder
-    arg_parse.add_argument("-prefix_file_name", dest="prefix_file", required=True)
-
-    # OpenAI API key
-    arg_parse.add_argument("-api_key", dest="api_key", required=True)
-    # OpenAI LLM model
-    arg_parse.add_argument("-openai_model", dest="model", required=True)
-
-    # OpenAI Input pricing per million tokens - to calculate cost of every processed document - not required
-    arg_parse.add_argument("-model_pricing_input", dest="model_pricing_input", required=False)
-    # OpenAI Output pricing per million tokens - to calculate cost of every processed document - not required
-    arg_parse.add_argument("-model_pricing_output", dest="model_pricing_output", required=False)
-
-    args = arg_parse.parse_args()
-
-    pricing_input = args.model_pricing_input
-    pricing_output = args.model_pricing_output
-
-    folder_path = args.folder_path
-    prefix_file = args.prefix_file  # this file contains the LLM prefix
-
-    filenames = [os.fsdecode(file) for file in os.listdir(folder_path)]
-    if prefix_file not in filenames:  # check the prefix file
-        raise FileNotFoundError("Prefix file missing")
-
-    llm_client = OpenAI(api_key=args.api_key)
-    model = args.model
-
-    prefix = read_prefix_file(os.path.join(folder_path, prefix_file))
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(filename='files/log.txt',
+                        encoding='utf-8',
+                        filemode='a',
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        datefmt='%H:%M:%S',
+                        level=logging.INFO)
 
     try:
-        llm_prefix = prefix['#PREFIX']
-        json_prefix = prefix['#JSON_PREFIX']
-        text_prefix = prefix['#TEXT_PREFIX']
-    except KeyError as e:
-        raise KeyError(f"Check for the keyword {str(e)} in the prefix file")
+        job_config = config["config"]
+        llm_config = config["llm_prefix"]
 
-    database = ServerDbAPI(args.api_url, args.db_api_key)
+        folder_path = job_config["folder_path"]
+        api_url = job_config["api_url"]
+        db_api_key = job_config["db_api_key"]
+        api_key = job_config["api_key"]
+        model = job_config["model"]
+        pricing_input = job_config.get("model_pricing_input", None)
+        pricing_output = job_config.get("model_pricing_output", None)
 
-    file_hashes = get_hashes(folder_path, prefix_file)
-    missing_files = database.get_missing_values(file_hashes)
+        llm_prefix = llm_config["prefix"]
+        json_prefix = llm_config["json_prefix"]
+        text_prefix = llm_config["text_prefix"]
+    except Exception as ex:
+        logger.error(traceback.format_exc())
+        raise ex
+
+    try:
+        llm_client = OpenAI(api_key=api_key)
+        database = ServerDbAPI(api_url, db_api_key)
+
+        file_hashes = get_hashes(folder_path, ".pdf")
+        missing_files = database.get_missing_values(file_hashes)
+    except Exception as ex:
+        logger.error(traceback.format_exc())
+        raise ex
 
     for (path, hash_) in missing_files:
-        parsed_text = parse_pdf(path)
-
-        # date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         try:
+            parsed_text = parse_pdf(path)
+
+            # date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(path)))
+            date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
             json_query = f"{json_prefix}\n{parsed_text}"
 
             data_1 = llm(llm_client, model, llm_prefix, json_query)
             data = data_1.replace('json', '').replace('```', '')  # Sometimes the LLM uses Markdown
 
-            json_data = json.loads(data)
-
             print(data)
+
+            json_data = json.loads(data)
 
             num = json_data['Numero']
             name = json_data['Nome']
@@ -162,23 +154,31 @@ def main():
                 input_price = (len(json_query) + len(text_query)) * (float(pricing_input) / 1000000)
                 output_price = (len(data_1) + len(text)) * (float(pricing_output) / 1000000)
 
+                logger.info(f"{num} - {name} - {input_price + output_price}$")
                 print(f"{num} - {name} - {input_price + output_price}$")
             else:
+                logger.info(f"{num} - {name}")
                 print(f"{num} - {name}")
-        except Exception:
-            traceback.print_exc()
+        except:
+            logger.error(traceback.format_exc())
 
     hashes = [hash_ for (_, hash_) in file_hashes]
 
-    # CIRCOLARI
-    for circ_hash in database.get_circ_hashes():
-        if circ_hash not in hashes:
-            database.delete_circ(circ_hash)
+    try:
+        # CIRCOLARI
+        for circ_hash in database.get_circ_hashes():
+            if circ_hash not in hashes:
+                database.delete_circ(circ_hash)
+    except:
+        logger.error(traceback.format_exc())
 
-    # COMUNICAZIONI
-    for com_hash in database.get_comm_hashes():
-        if com_hash not in hashes:
-            database.delete_comm(com_hash)
+    try:
+        # COMUNICAZIONI
+        for com_hash in database.get_comm_hashes():
+            if com_hash not in hashes:
+                database.delete_comm(com_hash)
+    except:
+        logger.error(traceback.format_exc())
 
 
 if __name__ == "__main__":
