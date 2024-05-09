@@ -11,6 +11,9 @@ class ServerDbAPI:
         self.key = key
 
     def get_missing_values(self, hashes):
+        if not hashes:
+            hashes = [("", "")]
+        
         data = {
             'key': self.key,
             'hashes': hashes
@@ -20,7 +23,8 @@ class ServerDbAPI:
         if response.status_code != 200:
             raise HTTPError(f"request status code {response.status_code}\n{response.text}")
 
-        return response.json()['data']
+        data = response.json()['data']
+        return [x for x in data if x != ["", ""]]
 
     def add_circ(self, *row_data):
         data = {
