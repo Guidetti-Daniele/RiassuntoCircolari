@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riassunto Circolari - UI</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <nav>
+      <div class="logo">
+        <a href="https://www.ispiana.edu.it/" target="_blank">
+          <img src="../static/logo.png" alt="logo" />
+        </a>
+      </div>
+
+      <div class="title-wrapper">
+        <h1 class="title">Riassunto Circolari</h1>
+      </div>
+    </nav>
+
+    <main>
+      <div class="form-wrapper">
+        <div class="form">
+          <div class="input-row">
+            <div class="dropdown select">
+              <div class="dropdown-selected">
+                <span
+                  class="selected-option-text"
+                  data-field-name="Destinatario"
+                ></span>
+                <div class="arrow"></div>
+              </div>
+
+              <div class="dropdown-menu">
+                <div class="dropdown-option">Dirigenti Scolastici</div>
+                <div class="dropdown-option">Docenti</div>
+                <div class="dropdown-option">Genitori</div>
+                <div class="dropdown-option">Personale ATA</div>
+                <div class="dropdown-option">Personale</div>
+                <div class="dropdown-option">Studenti</div>
+                <div class="dropdown-option">Tutti</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="dropdown select">
+              <div class="dropdown-selected">
+                <span
+                  class="selected-option-text"
+                  data-field-name="Classe"
+                ></span>
+                <div class="arrow"></div>
+              </div>
+
+              <div class="dropdown-menu">
+                <div class="dropdown-option">1°A</div>
+                <div class="dropdown-option">1°B</div>
+                <div class="dropdown-option">1°C</div>
+                <div class="dropdown-option">1°D</div>
+                <div class="dropdown-option">1°E</div>
+
+                <div class="dropdown-option">2°A</div>
+                <div class="dropdown-option">2°B</div>
+                <div class="dropdown-option">2°C</div>
+                <div class="dropdown-option">2°D</div>
+                <div class="dropdown-option">2°E</div>
+
+                <div class="dropdown-option">3°A</div>
+                <div class="dropdown-option">3°B</div>
+                <div class="dropdown-option">3°C</div>
+                <div class="dropdown-option">3°D</div>
+                <div class="dropdown-option">3°E</div>
+
+                <div class="dropdown-option">4°A</div>
+                <div class="dropdown-option">4°B</div>
+                <div class="dropdown-option">4°C</div>
+                <div class="dropdown-option">4°D</div>
+                <div class="dropdown-option">4°E</div>
+
+                <div class="dropdown-option">5°A</div>
+                <div class="dropdown-option">5°B</div>
+                <div class="dropdown-option">5°C</div>
+                <div class="dropdown-option">5°D</div>
+                <div class="dropdown-option">5°E</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="dropdown select">
+              <div class="dropdown-selected">
+                <span
+                  class="selected-option-text"
+                  data-field-name="Tipo"
+                ></span>
+                <div class="arrow"></div>
+              </div>
+
+              <div class="dropdown-menu">
+                <div class="dropdown-option">Circolari</div>
+                <div class="dropdown-option">Comunicazioni</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="document-wrapper"></div>
+
+          <!-- <div class="document-row">
+            <p class="document-description">Assemblea d'istituto</p>
+          </div>
+
+          <div class="document-row">
+            <p class="document-description">
+              Uscita anticipata per la giornata del 28/04/2024 - classe 1° C
+            </p>
+          </div>
+          <div class="document-row">
+            <p class="document-description">Gita scolastica</p>
+          </div>
+
+          <div class="document-row">
+            <p class="document-description">Mensa</p>
+          </div>
+          <div class="document-row">
+            <p class="document-description">Servizi di trasporto</p>
+          </div>
+
+          <div class="document-row">
+            <p class="document-description">Auguri di Natale</p>
+          </div> -->
+
+          <div class="input-row">
+            <button class="submit-btn" disabled>RIASSUMI</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="markdownDisplay"></div>
+    </main>
+
+    <script src="./scripts/dropdown.js"></script>
+    <script src="./scripts/document-selection.js"></script>
+  </body>
+</html>
