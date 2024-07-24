@@ -15,6 +15,9 @@
   --yellow: #dcbc18;
   --light-blue: #0088d1;
 
+  --select-color: #131212;
+  --select-color-hover: #13121280;
+
   /* Global font properties */
   color: var(--white);
   font-family: "Inter", sans-serif;
@@ -119,91 +122,10 @@ main #markdownDisplay:empty::before {
   margin: 1em 0px;
 }
 
-.form .input-row .dropdown {
-  position: relative;
-  flex-basis: 100%;
+.input-row field-select {
+  width: 100%;
   height: 40px;
 }
-
-.dropdown .dropdown-selected {
-  width: 100%;
-  height: 100%;
-  padding: 1.5em;
-  border-radius: 5px;
-  background-color: rgba(19, 18, 18, 1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.5s;
-  cursor: pointer;
-}
-
-.dropdown .dropdown-selected:hover {
-  background: rgba(19, 18, 18, 0.5);
-}
-
-.dropdown .dropdown-selected .selected-option-text:empty::before {
-  content: attr(data-field-name);
-}
-
-.dropdown .dropdown-selected .arrow {
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid var(--white);
-  transition: rotate 0.5s;
-}
-
-.dropdown .dropdown-menu {
-  position: absolute;
-  top: 50px;
-  left: 0px;
-  width: 100%;
-  border-radius: 5px;
-  background: rgba(19, 18, 18, 1);
-  transform: translateY(-50px);
-  opacity: 0;
-  visibility: hidden;
-  transition: transform, opacity, 0.5s;
-  z-index: 10;
-}
-
-.dropdown .dropdown-menu .dropdown-option {
-  height: 30px;
-  padding: 1.2em 0.8em;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.5s;
-  user-select: none;
-}
-
-.dropdown .dropdown-menu .dropdown-option:hover {
-  background-color: rgba(63, 63, 63, 0.747);
-}
-
-.dropdown .dropdown-menu:has(.dropdown-option:nth-child(8)) {
-  max-height: 700%;
-  overflow-y: scroll;
-}
-
-/* When the dropdown is opened */
-
-.dropdown.opened .dropdown-menu {
-  transform: translateY(0px);
-  opacity: 1;
-  visibility: visible;
-  display: block;
-}
-
-.dropdown.opened .dropdown-selected {
-  border: 1px solid var(--green);
-}
-
-.dropdown.opened .dropdown-selected .arrow {
-  rotate: 180deg;
-}
-
-/* ---------------------------- */
 
 .form .document-wrapper {
   width: 100%;
