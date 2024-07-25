@@ -121,6 +121,7 @@ main .form-wrapper {
   --field-select-color: #fff;
   --field-select-background: #131212;
   --field-select-background-hover: #13121280;
+  --field-select-focus-border-color: var(--green);
   --field-select-horizontal-padding: 1.5em;
   --field-select-vertical-padding: 1.5em;
   --field-select-option-horizontal-padding: 1.5em;
@@ -236,6 +237,7 @@ main .form-wrapper {
   padding: 0.8em;
   color: black;
   cursor: pointer;
+  user-select: none;
 }
 
 .input-row .submit-btn:disabled {

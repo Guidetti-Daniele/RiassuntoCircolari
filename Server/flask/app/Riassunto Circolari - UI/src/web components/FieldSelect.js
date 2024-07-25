@@ -48,16 +48,15 @@ export class FieldSelect extends LitElement {
     .menu {
       position: absolute;
       transform-origin: top;
-      transform: translateY(-50%);
       width: 100%;
       border-radius: 5px;
       overflow-y: auto;
       background: var(--field-select-background);
       box-shadow: 0 4px 8px 1px black;
-      opacity: 0;
-      visibility: hidden;
-      transition: transform, opacity, 0.5s;
       z-index: 10;
+
+      max-height: 0px;
+      transition: max-height 0.2s;
     }
 
     .menu::-webkit-scrollbar {
@@ -89,23 +88,20 @@ export class FieldSelect extends LitElement {
       background-color: var(--field-select-option-hover);
     }
 
-    .menu {
-      transform: translateY(0px);
-      opacity: 1;
-      visibility: visible;
+    .open .menu {
+      max-height: var(--menu-max-height);
     }
 
-    .current-option {
-      border: 1px solid var(--green);
+    .open .current-option {
+      border: 1px solid var(--field-select-focus-border-color);
     }
 
-    .arrow {
+    .open .arrow {
       rotate: 180deg;
     }
   `;
 
   static properties = {
-    maxElementsInView: {},
     name: {},
     value: {},
   };
@@ -115,8 +111,48 @@ export class FieldSelect extends LitElement {
 
     this.updatedSlot = false; // This flag is used to avoid to run the handleSlotChange method twice
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
-    this.name = ""; // name of the field
-    this.value = ""; // the current of the selected option
+    this.name = ""; // name of the field select
+    this.value = ""; // the selected option
+  }
+
+  toggleSelect(event) {
+    const select = this.renderRoot?.querySelector(".wrapper");
+
+    // Toggling the select when the user clicks on it
+    const clicked = event.composedPath()[0];
+
+    if (clicked.closest(".current-option")) {
+      select.classList.toggle("open");
+      return;
+    }
+
+    // Closing the select if it's opened and the user clicks outside of it
+
+    if (!select.classList.contains("open")) return;
+
+    const menu = this.renderRoot?.querySelector(".menu");
+    const menuDimensions = menu.getBoundingClientRect();
+    if (
+      event.clientX < menuDimensions.left ||
+      event.clientX > menuDimensions.right ||
+      event.clientY < menuDimensions.top ||
+      event.clientY > menuDimensions.bottom
+    )
+      select.classList.remove("open");
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener("click", (event) =>
+      this.toggleSelect.apply(this, [event])
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("click", (event) =>
+      this.toggleSelect.apply(this, [event])
+    );
   }
 
   handleSlotChange() {
@@ -150,7 +186,7 @@ export class FieldSelect extends LitElement {
       }, 0);
 
     const menuElement = this.renderRoot?.querySelector(".menu");
-    menuElement.style.maxHeight = `${maxHeight}px`;
+    menuElement.style = `--menu-max-height: ${maxHeight}px`;
   }
 
   render() {
