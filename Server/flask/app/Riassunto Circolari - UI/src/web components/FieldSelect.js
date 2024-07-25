@@ -137,14 +137,13 @@ export class FieldSelect extends LitElement {
         // N.B: this operation causes the event @slotchange to be fired
         // so I set the flag updatedSlot to true to avoid to make this method running again.
         host.removeChild(child);
+        this.updatedSlot = true;
       }
     });
 
-    this.updatedSlot = true;
-
     // Setting the max-height of the menu according to maxElementsInView
     const maxHeight = Array.from(host.children)
-      .slice(-this.maxElementsInView)
+      .slice(0, this.maxElementsInView)
       .reduce((height, currentChild) => {
         const childHeight = currentChild.getBoundingClientRect().height;
         return height + childHeight;
