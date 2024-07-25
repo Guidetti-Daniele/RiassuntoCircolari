@@ -1,11 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
+/* GLOBAL CSS  */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 
-  /* CSS variables */
   --primary: #212121;
   --background: #000000;
   --white: #f0f0f0;
@@ -15,10 +16,6 @@
   --yellow: #dcbc18;
   --light-blue: #0088d1;
 
-  --select-color: #131212;
-  --select-color-hover: #13121280;
-
-  /* Global font properties */
   color: var(--white);
   font-family: "Inter", sans-serif;
 }
@@ -45,6 +42,10 @@ body {
 ::-webkit-scrollbar-button {
   display: none;
 }
+
+/* -------------------------------------------- */
+
+/* NAVBAR */
 
 nav {
   width: 100%;
@@ -77,6 +78,10 @@ nav .title-wrapper .title {
   font-size: calc(1em + 0.8vw);
 }
 
+/* -------------------------------------------- */
+
+/* MAIN WRAPPER */
+
 main {
   flex-grow: 1;
   display: flex;
@@ -95,7 +100,43 @@ main .form-wrapper {
   background: var(--primary);
 }
 
-main #markdownDisplay {
+/* -------------------------------------------- */
+
+/* INPUT ROW */
+
+.form .input-row {
+  display: flex;
+  width: 100%;
+  margin: 1em 0px;
+}
+
+/* -------------------------------------------- */
+
+/* FIELD-SELECT COMPONENT */
+
+.input-row field-select {
+  width: 100%;
+  height: 40px;
+
+  --field-select-color: #fff;
+  --field-select-background: #131212;
+  --field-select-background-hover: #13121280;
+  --field-select-horizontal-padding: 1.5em;
+  --field-select-vertical-padding: 1.5em;
+  --field-select-option-horizontal-padding: 1.5em;
+  --field-select-option-vertical-padding: 0.7em;
+  --field-select-option-hover: #3f3f3fbe;
+  --field-select-option-min-height: 30px;
+  --field-select-scrollbar-width: 4px;
+  --field-select-scrollbar-border-radius: 5px;
+  --field-select-scrollbar-thumb-background: var(--green);
+}
+
+/* -------------------------------------------- */
+
+/* MARKDOWN DISPLAY */
+
+#markdownDisplay {
   position: relative;
   width: 700px;
   max-width: 100%;
@@ -104,7 +145,7 @@ main #markdownDisplay {
   background: white;
 }
 
-main #markdownDisplay:empty::before {
+#markdownDisplay:empty::before {
   content: "Qui verrà visualizzato il riassunto.\aPer iniziare selezionare una circolare.";
   white-space: pre-wrap;
   color: black;
@@ -116,16 +157,9 @@ main #markdownDisplay:empty::before {
   font-size: clamp(1rem, 10px, 20pt);
 }
 
-.form .input-row {
-  display: flex;
-  width: 100%;
-  margin: 1em 0px;
-}
+/* -------------------------------------------- */
 
-.input-row field-select {
-  width: 100%;
-  height: 40px;
-}
+/* OTHER */
 
 .form .document-wrapper {
   width: 100%;
@@ -207,6 +241,10 @@ main #markdownDisplay:empty::before {
 .input-row .submit-btn:disabled {
   cursor: not-allowed;
 }
+
+/* -------------------------------------------- */
+
+/* RESPONSIVE MEDIA QUERIES  */
 
 @media screen and (max-width: 500px) {
   main {
