@@ -2,7 +2,16 @@ import {
   LitElement,
   html,
   css,
-} from "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js";
+} from "https://cdn.jsdelivr.net/npm/lit@3.1.4/+esm";
+
+import {
+  ref,
+  createRef,
+} from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/ref.js";
+
+import { when } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/when.js";
+
+import { classMap } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/class-map.js";
 
 export class FieldSelect extends LitElement {
   static styles = css`
@@ -102,8 +111,9 @@ export class FieldSelect extends LitElement {
   `;
 
   static properties = {
-    name: {},
-    valueTuple: {},
+    name: { type: String },
+    valueTuple: { type: Array < String > 2 },
+    isOpened: { type: Boolean },
   };
 
   constructor() {
@@ -111,8 +121,13 @@ export class FieldSelect extends LitElement {
 
     this.updatedSlot = false; // This flag is used to avoid to run the handleSlotChange method twice
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
-    this.name = ""; // name of the field select
-    this.valueTuple = []; // the selected option
+    this.name = ""; // Name of the field select
+    this.valueTuple = []; // The selected option
+    this.isOpened = false; // Flag that indicates if the option menu is opened
+
+    // Refs
+    this.menuRef = createRef();
+    this.slotRef = createRef();
   }
 
   connectedCallback() {
@@ -157,11 +172,10 @@ export class FieldSelect extends LitElement {
 
   // return true if the component has been opened, false otherwise
   toggleSelect(event) {
-    const wrapper = this.renderRoot?.querySelector(".wrapper");
     const clicked = event.composedPath()[0];
 
     if (clicked.closest(".current-option")) {
-      wrapper.classList.toggle("open");
+      this.isOpened = !this.isOpened;
       return true;
     }
 
@@ -169,11 +183,9 @@ export class FieldSelect extends LitElement {
   }
 
   closeIfClickingOutside(event) {
-    const wrapper = this.renderRoot?.querySelector(".wrapper");
+    if (!this.isOpened) return;
 
-    if (!wrapper.classList.contains("open")) return;
-
-    const menu = this.renderRoot?.querySelector(".menu");
+    const menu = this.menuRef.value;
     const menuDimensions = menu.getBoundingClientRect();
 
     if (
@@ -182,7 +194,7 @@ export class FieldSelect extends LitElement {
       event.clientY < menuDimensions.top ||
       event.clientY > menuDimensions.bottom
     )
-      wrapper.classList.remove("open");
+      this.isOpened = false;
   }
 
   handleSlotChange() {
@@ -202,7 +214,7 @@ export class FieldSelect extends LitElement {
 
   clearSlottedElements() {
     const host = this.shadowRoot.host;
-    const slot = this.renderRoot?.querySelector("slot");
+    const slot = this.slotRef.value;
     const slottedElements = slot.assignedElements();
 
     Array.from(slottedElements).forEach((slotted, index) => {
@@ -227,15 +239,13 @@ export class FieldSelect extends LitElement {
         return height + childHeight;
       }, 0);
 
-    const menuElement = this.renderRoot?.querySelector(".menu");
+    const menuElement = this.menuRef.value;
     menuElement.style = `--menu-max-height: ${maxHeight}px`;
   }
 
   setValue(event) {
-    const wrapper = this.renderRoot?.querySelector(".wrapper");
-
     this.valueTuple = [event.target.innerText, event.target.value];
-    wrapper.classList.remove("open");
+    this.isOpened = false;
 
     this.dispatchEvent(new Event("change"));
   }
@@ -243,25 +253,29 @@ export class FieldSelect extends LitElement {
   // ----------------------------------------
 
   render() {
-    return this.name
-      ? html`
-          <div class="wrapper">
+    return html`
+      ${when(
+        this.name,
+        () => html`
+          <div class="wrapper ${classMap({ open: this.isOpened })}">
             <div class="current-option">
               <span>${this.valueTuple[0] || this.name}</span>
               <div class="arrow"></div>
             </div>
 
-            <div class="menu">
+            <div class="menu" ${ref(this.menuRef)}>
               <slot
                 @slotchange=${this.handleSlotChange}
                 @click=${this.setValue}
+                ${ref(this.slotRef)}
               >
                 Error no option provided!
               </slot>
             </div>
           </div>
         `
-      : html``;
+      )}
+    `;
   }
 }
 
