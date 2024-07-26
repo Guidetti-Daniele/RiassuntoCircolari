@@ -115,62 +115,92 @@ export class FieldSelect extends LitElement {
     this.valueTuple = []; // the selected option
   }
 
-  toggleSelect(event) {
-    const select = this.renderRoot?.querySelector(".wrapper");
+  connectedCallback() {
+    super.connectedCallback();
 
+    document.addEventListener("click", (event) =>
+      this.handleClick.apply(this, [event])
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    document.removeEventListener("click", (event) =>
+      this.handleClick.apply(this, [event])
+    );
+  }
+
+  // GETTERS & SETTERS
+
+  get value() {
+    return this.valueTuple[0];
+  }
+
+  set value(v) {
+    this.valueTuple = [this.valueTuple[0], v];
+  }
+
+  // ----------------------------------------
+
+  // CLASS METHODS:
+
+  handleClick(event) {
     // Toggling the select when the user clicks on it
+    const wasComponentClicked = this.toggleSelect(event);
+
+    if (wasComponentClicked) return;
+
+    // Closing the select if it's opened and the user clicks outside of it
+    this.closeIfClickingOutside(event);
+  }
+
+  // return true if the component has been opened, false otherwise
+  toggleSelect(event) {
+    const wrapper = this.renderRoot?.querySelector(".wrapper");
     const clicked = event.composedPath()[0];
 
     if (clicked.closest(".current-option")) {
-      select.classList.toggle("open");
-      return;
+      wrapper.classList.toggle("open");
+      return true;
     }
 
-    // Closing the select if it's opened and the user clicks outside of it
+    return false;
+  }
 
-    if (!select.classList.contains("open")) return;
+  closeIfClickingOutside(event) {
+    const wrapper = this.renderRoot?.querySelector(".wrapper");
+
+    if (!wrapper.classList.contains("open")) return;
 
     const menu = this.renderRoot?.querySelector(".menu");
     const menuDimensions = menu.getBoundingClientRect();
+
     if (
       event.clientX < menuDimensions.left ||
       event.clientX > menuDimensions.right ||
       event.clientY < menuDimensions.top ||
       event.clientY > menuDimensions.bottom
     )
-      select.classList.remove("open");
-  }
-
-  setValue(event) {
-    const wrapper = this.renderRoot?.querySelector(".wrapper");
-
-    this.valueTuple = [event.target.innerText, event.target.value];
-    wrapper.classList.remove("open");
-
-    this.dispatchEvent(new Event("change"));
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener("click", (event) =>
-      this.toggleSelect.apply(this, [event])
-    );
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener("click", (event) =>
-      this.toggleSelect.apply(this, [event])
-    );
+      wrapper.classList.remove("open");
   }
 
   handleSlotChange() {
+    // Avoiding to make the method running again after this.clearSlottedElements() or
+    // other methods that changes the slot  are invoked
     if (this.updatedSlot) {
       this.updatedSlot = false;
       return;
     }
 
     // Every slotted element which isn't an option will be removed
+    this.clearSlottedElements();
+
+    // Setting the max-height of the menu according to maxElementsInView
+    this.setSlotMaxHeight();
+  }
+
+  clearSlottedElements() {
     const host = this.shadowRoot.host;
     const slot = this.renderRoot?.querySelector("slot");
     const slottedElements = slot.assignedElements();
@@ -185,8 +215,11 @@ export class FieldSelect extends LitElement {
         this.updatedSlot = true;
       }
     });
+  }
 
-    // Setting the max-height of the menu according to maxElementsInView
+  setSlotMaxHeight() {
+    const host = this.shadowRoot.host;
+
     const maxHeight = Array.from(host.children)
       .slice(0, this.maxElementsInView)
       .reduce((height, currentChild) => {
@@ -198,13 +231,16 @@ export class FieldSelect extends LitElement {
     menuElement.style = `--menu-max-height: ${maxHeight}px`;
   }
 
-  get value() {
-    return this.valueTuple[0];
+  setValue(event) {
+    const wrapper = this.renderRoot?.querySelector(".wrapper");
+
+    this.valueTuple = [event.target.innerText, event.target.value];
+    wrapper.classList.remove("open");
+
+    this.dispatchEvent(new Event("change"));
   }
 
-  set value(v) {
-    this.valueTuple = [this.valueTuple[0], v];
-  }
+  // ----------------------------------------
 
   render() {
     return this.name
