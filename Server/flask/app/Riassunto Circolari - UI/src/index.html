@@ -166,7 +166,15 @@
       <div id="markdownDisplay"></div>
     </main>
 
-    <script src="./scripts/dropdown.js"></script>
-    <script src="./scripts/document-selection.js"></script>
+    <script>
+      // Testing the change event
+      const fieldSelectElement = document.querySelector(
+        'field-select[name="Destinatario"]'
+      );
+
+      fieldSelectElement.addEventListener("change", (event) => {
+        console.log(event.target.value);
+      });
+    </script>
   </body>
 </html>

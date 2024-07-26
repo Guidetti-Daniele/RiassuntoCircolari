@@ -103,7 +103,7 @@ export class FieldSelect extends LitElement {
 
   static properties = {
     name: {},
-    value: {},
+    valueTuple: {},
   };
 
   constructor() {
@@ -112,7 +112,7 @@ export class FieldSelect extends LitElement {
     this.updatedSlot = false; // This flag is used to avoid to run the handleSlotChange method twice
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
     this.name = ""; // name of the field select
-    this.value = ""; // the selected option
+    this.valueTuple = []; // the selected option
   }
 
   toggleSelect(event) {
@@ -139,6 +139,15 @@ export class FieldSelect extends LitElement {
       event.clientY > menuDimensions.bottom
     )
       select.classList.remove("open");
+  }
+
+  setValue(event) {
+    const wrapper = this.renderRoot?.querySelector(".wrapper");
+
+    this.valueTuple = [event.target.innerText, event.target.value];
+    wrapper.classList.remove("open");
+
+    this.dispatchEvent(new Event("change"));
   }
 
   connectedCallback() {
@@ -189,17 +198,28 @@ export class FieldSelect extends LitElement {
     menuElement.style = `--menu-max-height: ${maxHeight}px`;
   }
 
+  get value() {
+    return this.valueTuple[0];
+  }
+
+  set value(v) {
+    this.valueTuple = [this.valueTuple[0], v];
+  }
+
   render() {
     return this.name
       ? html`
           <div class="wrapper">
             <div class="current-option">
-              <span>${this.value || this.name}</span>
+              <span>${this.valueTuple[0] || this.name}</span>
               <div class="arrow"></div>
             </div>
 
             <div class="menu">
-              <slot @slotchange=${this.handleSlotChange}>
+              <slot
+                @slotchange=${this.handleSlotChange}
+                @click=${this.setValue}
+              >
                 Error no option provided!
               </slot>
             </div>
