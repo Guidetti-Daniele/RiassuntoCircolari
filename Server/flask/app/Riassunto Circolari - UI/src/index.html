@@ -94,12 +94,12 @@
 
     <script>
       // Testing the change event
-      const fieldSelectElement = document.querySelector(
-        'field-select[name="Destinatario"]'
-      );
+      const fieldSelectElements = document.querySelectorAll("field-select");
 
-      fieldSelectElement.addEventListener("change", (event) => {
-        console.log(event.target.value);
+      fieldSelectElements.forEach((el) => {
+        el.addEventListener("change", (event) => {
+          console.log(event.target.value);
+        });
       });
     </script>
   </body>

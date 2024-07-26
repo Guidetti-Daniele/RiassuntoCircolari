@@ -117,6 +117,7 @@ main .form-wrapper {
 .input-row field-select {
   width: 100%;
   height: 40px;
+  margin: 0.6em 0px;
 
   --field-select-color: #fff;
   --field-select-background: #131212;

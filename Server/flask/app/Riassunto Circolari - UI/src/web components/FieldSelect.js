@@ -61,7 +61,6 @@ export class FieldSelect extends LitElement {
       border-radius: 5px;
       overflow-y: auto;
       background: var(--field-select-background);
-      box-shadow: 0 4px 8px 1px black;
       z-index: 10;
 
       max-height: 0px;
@@ -99,6 +98,7 @@ export class FieldSelect extends LitElement {
 
     .open .menu {
       max-height: var(--menu-max-height);
+      box-shadow: 0 4px 8px 1px black;
     }
 
     .open .current-option {
@@ -174,7 +174,7 @@ export class FieldSelect extends LitElement {
   toggleSelect(event) {
     const clicked = event.composedPath()[0];
 
-    if (clicked.closest(".current-option")) {
+    if (clicked.closest(".current-option") && event.target.name === this.name) {
       this.isOpened = !this.isOpened;
       return true;
     }
