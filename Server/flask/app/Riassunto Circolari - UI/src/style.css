@@ -160,76 +160,7 @@ main .form-wrapper {
 
 /* -------------------------------------------- */
 
-/* OTHER */
-
-.form .document-wrapper {
-  width: 100%;
-  max-height: 400px;
-  background-color: rgba(19, 18, 18, 1);
-  margin-top: 3rem;
-  padding: 1em;
-  border-radius: 10px;
-  overflow-y: auto;
-}
-
-.form .document-wrapper:empty::after {
-  content: "Nessuna circolare disponibile per i campi selezionati";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5rem;
-  color: rgb(63, 63, 63);
-  text-align: center;
-}
-
-.document-wrapper .document-row {
-  display: flex;
-  align-items: center;
-  padding: 0.8em 0.5em;
-  gap: 2px;
-  transition: background-color 0.5s;
-  cursor: pointer;
-}
-
-.document-wrapper .document-row:hover {
-  background-color: rgba(63, 63, 63, 0.747);
-}
-
-.document-wrapper .document-row:not(:last-child) {
-  border-bottom: 1px solid var(--white);
-}
-
-.document-row .document-description {
-  display: block;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  transition: all 0.2s;
-  user-select: none;
-}
-
-.document-row.document-selected .document-description {
-  color: var(--green);
-  font-weight: bold;
-}
-
-.document-row:hover .document-description {
-  display: table;
-  white-space: wrap;
-}
-
-.document-row:hover .document-description::before {
-  display: table-cell;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-
-.document-row .document-description::before {
-  content: "\f1c1";
-  font-family: FontAwesome;
-  font-size: 18pt;
-  margin: 0px 10px;
-}
+/* SUBMIT-BTN */
 
 .input-row .submit-btn {
   flex-basis: 33.33%;
