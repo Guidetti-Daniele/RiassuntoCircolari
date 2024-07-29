@@ -15,6 +15,9 @@
   --orange: #d18800;
   --yellow: #dcbc18;
   --light-blue: #0088d1;
+  --empty-text-gray: #222222;
+
+  --border-radius: 5px;
 
   color: var(--white);
   font-family: "Inter", sans-serif;
@@ -61,6 +64,7 @@ nav .logo {
   flex-basis: 60px;
   flex-shrink: 0;
 }
+
 nav .logo img {
   width: 100%;
   height: 40px;
@@ -87,7 +91,6 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   gap: 1rem;
   padding: 1rem;
 }
@@ -98,13 +101,14 @@ main .form-wrapper {
   max-height: 100%;
   padding: 1em 2em;
   background: var(--primary);
+  border-radius: var(--border-radius);
 }
 
 /* -------------------------------------------- */
 
 /* INPUT ROW */
 
-.form .input-row {
+.input-row {
   display: flex;
   width: 100%;
   margin: 1em 0px;
@@ -130,7 +134,7 @@ main .form-wrapper {
   --field-select-option-hover: #3f3f3fbe;
   --field-select-option-min-height: 30px;
   --field-select-scrollbar-width: 4px;
-  --field-select-scrollbar-border-radius: 5px;
+  --field-select-scrollbar-border-radius: var(--border-radius);
   --field-select-scrollbar-thumb-background: var(--green);
 }
 
@@ -140,17 +144,18 @@ main .form-wrapper {
 
 #markdownDisplay {
   position: relative;
-  width: 700px;
+  width: 500px;
   max-width: 100%;
   min-height: 400px;
   padding: 1em 2em;
   background: white;
+  border-radius: var(--border-radius);
 }
 
 #markdownDisplay:empty::before {
   content: "Qui verrà visualizzato il riassunto.\aPer iniziare selezionare una circolare.";
   white-space: pre-wrap;
-  color: black;
+  color: var(--empty-text-gray);
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
@@ -193,5 +198,12 @@ main .form-wrapper {
 
   .input-row .submit-btn {
     flex-basis: 100%;
+  }
+}
+
+
+@media screen and (max-width: 1000px) {
+  main {
+    flex-direction: column;
   }
 }

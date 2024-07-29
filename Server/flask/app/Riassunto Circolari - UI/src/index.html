@@ -1,106 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Riassunto Circolari - UI</title>
-    <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
-    <!-- Lit components -->
-    <script type="module" src="../src/web components/FieldSelect.js"></script>
-  </head>
-  <body>
-    <nav>
-      <div class="logo">
-        <a href="https://www.ispiana.edu.it/" target="_blank">
-          <img src="../static/logo.png" alt="logo" />
-        </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riassunto Circolari - UI</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Lit components -->
+  <script type="module" src="../src/web components/FieldSelect.js"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <a href="https://www.ispiana.edu.it/" target="_blank">
+        <img src="../static/logo.png" alt="logo" />
+      </a>
+    </div>
+
+    <div class="title-wrapper">
+      <h1 class="title">Riassunto Circolari</h1>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-wrapper">
+      <div class="input-row">
+        <field-select name="Destinatario">
+          <option value="Dirigenti Scolastici">Dirigenti Scolastici</option>
+          <option value="Docenti">Docenti</option>
+          <option value="Genitori">Genitori</option>
+          <option value="Personale ATA">Personale ATA</option>
+          <option value="Personale">Personale</option>
+          <option value="Studenti">Studenti</option>
+          <option value="Tutti">Tutti</option>
+        </field-select>
       </div>
 
-      <div class="title-wrapper">
-        <h1 class="title">Riassunto Circolari</h1>
-      </div>
-    </nav>
+      <div class="input-row">
+        <field-select name="Classe">
+          <option value="1°A">1°A</option>
+          <option value="1°B">1°B</option>
+          <option value="1°C">1°C</option>
 
-    <main>
-      <div class="form-wrapper">
-        <div class="form">
-          <div class="input-row">
-            <field-select name="Destinatario">
-              <option value="Dirigenti Scolastici">Dirigenti Scolastici</option>
-              <option value="Docenti">Docenti</option>
-              <option value="Genitori">Genitori</option>
-              <option value="Personale ATA">Personale ATA</option>
-              <option value="Personale">Personale</option>
-              <option value="Studenti">Studenti</option>
-              <option value="Tutti">Tutti</option>
-            </field-select>
-          </div>
+          <option value="2°A">2°A</option>
+          <option value="2°B">2°B</option>
+          <option value="2°C">2°C</option>
 
-          <div class="input-row">
-            <field-select name="Classe">
-              <option value="1°A">1°A</option>
-              <option value="1°B">1°B</option>
-              <option value="1°C">1°C</option>
+          <option value="3°A">3°A</option>
+          <option value="3°B">3°B</option>
+          <option value="3°C">3°C</option>
 
-              <option value="2°A">2°A</option>
-              <option value="2°B">2°B</option>
-              <option value="2°C">2°C</option>
+          <option value="4°A">4°A</option>
+          <option value="4°B">4°B</option>
+          <option value="4°C">4°C</option>
 
-              <option value="3°A">3°A</option>
-              <option value="3°B">3°B</option>
-              <option value="3°C">3°C</option>
-
-              <option value="4°A">4°A</option>
-              <option value="4°B">4°B</option>
-              <option value="4°C">4°C</option>
-
-              <option value="5°A">5°A</option>
-              <option value="5°B">5°B</option>
-              <option value="5°C">5°C</option>
-            </field-select>
-          </div>
-
-          <div class="input-row">
-            <field-select name="Tipo">
-              <option value="Circolari">Circolari</option>
-              <option value="Comunicazioni">Comunicazioni</option>
-            </field-select>
-          </div>
-
-          <div class="input-row">
-            <field-select name="Documenti">
-              <option value="doc1">Assemblea d'istituto</option>
-              <option value="doc2">Gita scolastica</option>
-              <option value="doc3">Servizi di trasporto</option>
-            </field-select>
-          </div>
-
-          <div class="input-row">
-            <button class="submit-btn" disabled>RIASSUMI</button>
-          </div>
-        </div>
+          <option value="5°A">5°A</option>
+          <option value="5°B">5°B</option>
+          <option value="5°C">5°C</option>
+        </field-select>
       </div>
 
-      <div id="markdownDisplay"></div>
-    </main>
+      <div class="input-row">
+        <field-select name="Tipo">
+          <option value="Circolari">Circolari</option>
+          <option value="Comunicazioni">Comunicazioni</option>
+        </field-select>
+      </div>
 
-    <script>
-      // Testing the change event
-      const fieldSelectElements = document.querySelectorAll("field-select");
+      <div class="input-row">
+        <field-select name="Documenti">
+          <option value="doc1">Assemblea d'istituto</option>
+          <option value="doc2">Gita scolastica</option>
+          <option value="doc3">Servizi di trasporto</option>
+        </field-select>
+      </div>
 
-      fieldSelectElements.forEach((el) => {
-        el.addEventListener("change", (event) => {
-          console.log(event.target.value);
-        });
+      <div class="input-row">
+        <button class="submit-btn" disabled>RIASSUMI</button>
+      </div>
+    </div>
+
+    <div id="markdownDisplay"></div>
+  </main>
+
+  <script>
+    // Testing the change event
+    const fieldSelectElements = document.querySelectorAll("field-select");
+
+    fieldSelectElements.forEach((el) => {
+      el.addEventListener("change", (event) => {
+        console.log(event.target.value);
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
