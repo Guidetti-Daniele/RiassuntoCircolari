@@ -18,7 +18,7 @@
   --empty-text-gray: #222222;
 
   --border-radius: 5px;
-  --transition-time: 0.5s;
+  --transition-time: 0.3s;
 
   color: var(--white);
   font-family: "Inter", sans-serif;
