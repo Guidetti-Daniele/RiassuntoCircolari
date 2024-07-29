@@ -126,6 +126,7 @@ main {
 main .form-wrapper {
   width: 500px;
   max-width: 100%;
+  min-height: 410px;
   max-height: 100%;
   padding: 1em 2em;
   background: var(--primary);
@@ -174,7 +175,7 @@ main .form-wrapper {
   position: relative;
   width: 500px;
   max-width: 100%;
-  min-height: 400px;
+  min-height: 410px;
   padding: 1em 2em;
   background: white;
   border-radius: var(--border-radius);
