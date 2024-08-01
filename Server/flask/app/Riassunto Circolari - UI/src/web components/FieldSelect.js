@@ -40,7 +40,6 @@ export class FieldSelect extends LitElement {
       align-items: center;
       transition: background-color 0.5s;
       cursor: pointer;
-      user-select: none;
     }
 
     .current-option:hover {
@@ -83,13 +82,12 @@ export class FieldSelect extends LitElement {
     ::slotted(option) {
       display: flex;
       align-items: center;
-      min-height: var(--field-select-option-min-height);
+      min-height: var(--field-select-option-height);
       padding: var(--field-select-option-vertical-padding)
         var(--field-select-option-horizontal-padding) !important;
       color: var(--field-select-color) !important;
       transition: background-color 0.5s;
       cursor: pointer;
-      user-select: none;
     }
 
     ::slotted(option:hover) {

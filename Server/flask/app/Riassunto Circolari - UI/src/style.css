@@ -161,7 +161,7 @@ main .form {
   --field-select-option-horizontal-padding: 1.5em;
   --field-select-option-vertical-padding: 0.7em;
   --field-select-option-hover: #3f3f3fbe;
-  --field-select-option-min-height: 30px;
+  --field-select-option-height: 30px;
   --field-select-scrollbar-width: 4px;
   --field-select-scrollbar-border-radius: var(--border-radius);
   --field-select-scrollbar-thumb-background: var(--green);
@@ -176,16 +176,13 @@ main .form {
   max-height: 400px;
 
   --document-select-color: #fff;
-
+  --document-select-background: #131212;
   --document-select-empty-text: var(--empty-text-gray);
   --document-select-empty-padding: 3em;
   --document-select-empty-background: #727272;
-  --document-select-horizontal-padding: 1em;
-  --document-select-vertical-padding: 1em;
-  --document-select-border-radius: 10px;
-  --document-select-background: #131212;
-  --document-selecy-option-horizontal-padding: 0.5em;
-  --document-selecy-option-vertical-padding: 0.8em;
+  --document-select-border-radius: var(--border-radius);
+  --document-select-option-horizontal-padding: 1.5em;
+  --document-select-option-vertical-padding: 0.7em;
   --document-select-option-hover: #3f3f3fbe;
   --document-select-option-line: #fff;
   --document-select-active-color: var(--green);
@@ -227,7 +224,6 @@ main .form {
   padding: 0.8em;
   color: black;
   cursor: pointer;
-  user-select: none;
 }
 
 .input-row .submit-btn:disabled {

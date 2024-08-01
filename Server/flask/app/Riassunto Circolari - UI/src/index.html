@@ -82,7 +82,8 @@
 
         <div class="input-row">
           <document-select>
-            <option value="c">test</option>
+            <option value="1">test1</option>
+            <option value="2">test2</option>
           </document-select>
         </div>
 
@@ -95,13 +96,20 @@
     </main>
 
     <script>
-      // Testing the change event
+      // Testing the change event of the FieldSelect Component
       const fieldSelectElements = document.querySelectorAll("field-select");
 
       fieldSelectElements.forEach((el) => {
         el.addEventListener("change", (event) => {
           console.log(event.target.value);
         });
+      });
+
+      // Testing the change event of the DocumentSelect Component
+      const documentSelect = document.querySelector("document-select");
+
+      documentSelect.addEventListener("change", (event) => {
+        console.log(event.target.value);
       });
     </script>
   </body>
