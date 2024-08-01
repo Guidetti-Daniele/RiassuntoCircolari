@@ -15,6 +15,10 @@
 
     <!-- Lit components -->
     <script type="module" src="../src/web components/FieldSelect.js"></script>
+    <script
+      type="module"
+      src="../src/web components/DocumentSelect.js"
+    ></script>
   </head>
 
   <body>
@@ -32,7 +36,7 @@
     </nav>
 
     <main>
-      <div class="form-wrapper">
+      <div class="form">
         <div class="input-row">
           <field-select name="Destinatario">
             <option value="Dirigenti Scolastici">Dirigenti Scolastici</option>
@@ -77,11 +81,9 @@
         </div>
 
         <div class="input-row">
-          <field-select name="Documenti">
-            <option value="doc1">Assemblea d'istituto</option>
-            <option value="doc2">Gita scolastica</option>
-            <option value="doc3">Servizi di trasporto</option>
-          </field-select>
+          <document-select>
+            <option value="c">test</option>
+          </document-select>
         </div>
 
         <div class="input-row">
