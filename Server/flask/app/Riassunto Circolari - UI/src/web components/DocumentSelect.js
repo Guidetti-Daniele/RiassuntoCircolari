@@ -4,12 +4,13 @@ import {
   css,
 } from "https://cdn.jsdelivr.net/npm/lit@3.1.4/+esm";
 
-import {
-  ref,
-  createRef,
-} from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/ref.js";
-
 import { when } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/when.js";
+
+import { classMap } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/class-map.js";
+
+// N.B: ASSERT TO ASSIGN THE SVG ID IN THE SVG CODE IF YOU WANT TO CHANGE THE ICON
+const SVG_DOCUMENT_ICON_ID = "svg-id";
+// -----------------------------------------------
 
 export class DocumentSelect extends LitElement {
   static styles = css`
@@ -58,8 +59,8 @@ export class DocumentSelect extends LitElement {
       background-color: var(--document-select-row-background-hover);
     }
 
-    .document-row.active {
-      color: var(--document-select-active-row) !important;
+    .document-row.active option {
+      color: var(--document-select-active-row);
       font-weight: bold;
     }
 
@@ -90,33 +91,52 @@ export class DocumentSelect extends LitElement {
 
     this.value = "";
     this.icon = "";
-
-    // Refs
-    this.slotRef = createRef();
   }
 
   // CLASS METHODS
 
-  styleSelectedOption(event) {
-    const clicked = event.target;
+  setValue(value) {
+    const previousValue = this.value;
+    this.value = value;
 
-    if (clicked) {
-      const options = this.slotRef.value.assignedElements();
+    this.setIconActiveColor(previousValue, value); // Coloring the active icon USING THE FILL ATTRIBUTE of the SVG tag
 
-      for (let option of options) {
-        if (option.classList.contains("selected"))
-          option.classList.remove("selected");
-      }
-
-      clicked.classList.add("selected");
-    }
+    this.dispatchEvent(new Event("change"));
   }
 
-  setValue(event) {
-    this.styleSelectedOption(event);
+  setIconActiveColor(previousValue, newValue) {
+    const host = this.shadowRoot.host;
+    const normalIconColor = getComputedStyle(host).getPropertyValue(
+      "--document-select-color"
+    );
+    const activeIconColor = getComputedStyle(host).getPropertyValue(
+      "--document-select-active-row"
+    );
 
-    this.value = event.target.value;
-    this.dispatchEvent(new Event("change"));
+    // First removing the active color to the icon of the previous active option...
+    const previousActiveOption = this.renderRoot?.querySelector(
+      `.document-row option[value="${previousValue}"]`
+    );
+
+    if (previousActiveOption) {
+      const previousIcon =
+        previousActiveOption.parentElement.querySelector("object");
+
+      previousIcon
+        .getSVGDocument()
+        .getElementById(SVG_DOCUMENT_ICON_ID)
+        .setAttribute("fill", normalIconColor);
+    }
+
+    // ... then coloring the new active one
+    const activeOption = this.renderRoot?.querySelector(
+      `.document-row option[value="${newValue}"]`
+    );
+    const activeIcon = activeOption.parentElement.querySelector("object");
+    activeIcon
+      .getSVGDocument()
+      .getElementById(SVG_DOCUMENT_ICON_ID)
+      .setAttribute("fill", activeIconColor);
   }
 
   isEmpty() {
@@ -133,7 +153,12 @@ export class DocumentSelect extends LitElement {
     return Array.from(this.shadowRoot.host.children)
       .filter((element) => element.tagName === "OPTION")
       .map((option) => {
-        return html` <div class="document-row">
+        return html` <div
+          class="document-row ${classMap({
+            active: this.value === option.value,
+          })}"
+          @click=${() => this.setValue(option.value)}
+        >
           <object
             class="icon"
             type="image/svg+xml"
