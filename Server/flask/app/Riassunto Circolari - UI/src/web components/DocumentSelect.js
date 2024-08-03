@@ -99,44 +99,46 @@ export class DocumentSelect extends LitElement {
     const previousValue = this.value;
     this.value = value;
 
-    this.setIconActiveColor(previousValue, value); // Coloring the active icon USING THE FILL ATTRIBUTE of the SVG tag
+    // Coloring the icon of the active option with the active color USING THE FILL ATTRIBUTE of the SVG tag
+
+    // 1). First removing the active color to the icon of the previous active option
+    this.setIconColor(this.getNormalColor(), previousValue);
+
+    // 2). Then apply the active color to the icon of the new active option
+    this.setIconColor(this.getActiveColor(), value);
 
     this.dispatchEvent(new Event("change"));
   }
 
-  setIconActiveColor(previousValue, newValue) {
-    const host = this.shadowRoot.host;
-    const normalIconColor = getComputedStyle(host).getPropertyValue(
+  getNormalColor() {
+    return getComputedStyle(this.shadowRoot.host).getPropertyValue(
       "--document-select-color"
     );
-    const activeIconColor = getComputedStyle(host).getPropertyValue(
+  }
+
+  getActiveColor() {
+    return getComputedStyle(this.shadowRoot.host).getPropertyValue(
       "--document-select-active-row"
     );
+  }
 
-    // First removing the active color to the icon of the previous active option...
-    const previousActiveOption = this.renderRoot?.querySelector(
-      `.document-row option[value="${previousValue}"]`
+  getOptionByValue(value) {
+    return this.renderRoot?.querySelector(
+      `.document-row option[value="${value}"]`
     );
+  }
 
-    if (previousActiveOption) {
-      const previousIcon =
-        previousActiveOption.parentElement.querySelector("object");
+  setIconColor(color, optionValue) {
+    const option = this.getOptionByValue(optionValue);
 
-      previousIcon
+    if (option) {
+      const icon = option.parentElement.querySelector("object");
+
+      icon
         .getSVGDocument()
         .getElementById(SVG_DOCUMENT_ICON_ID)
-        .setAttribute("fill", normalIconColor);
+        .setAttribute("fill", color);
     }
-
-    // ... then coloring the new active one
-    const activeOption = this.renderRoot?.querySelector(
-      `.document-row option[value="${newValue}"]`
-    );
-    const activeIcon = activeOption.parentElement.querySelector("object");
-    activeIcon
-      .getSVGDocument()
-      .getElementById(SVG_DOCUMENT_ICON_ID)
-      .setAttribute("fill", activeIconColor);
   }
 
   isEmpty() {
