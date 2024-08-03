@@ -67,6 +67,7 @@ export class DocumentSelect extends LitElement {
     .document-row .icon {
       height: calc(var(--document-select-row-height) * 0.8);
       flex-shrink: 0;
+      pointer-events: none;
     }
 
     /* .document-row:hover .document-description {
