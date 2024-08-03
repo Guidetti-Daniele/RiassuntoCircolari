@@ -42,37 +42,32 @@ export class DocumentSelect extends LitElement {
       text-align: center;
     }
 
-    ::slotted(option) {
+    .document-row {
       width: 100%;
-      padding: var(--document-select-option-vertical-padding)
-        var(--document-select-option-horizontal-padding) !important;
+      height: var(--document-select-row-height);
+      padding: var(--document-select-row-vertical-padding)
+        var(--document-select-row-horizontal-padding) !important;
       display: flex;
       align-items: center;
+      gap: var(--document-select-row-gap);
       transition: background-color 0.5s;
       cursor: pointer;
-
-      /* display: block;
-      white-space: nowrap;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      transition: all 0.2s;
-     */
     }
 
-    ::slotted(option:hover) {
-      background-color: var(--document-select-option-hover);
+    .document-row:hover {
+      background-color: var(--document-select-row-background-hover);
     }
 
-    ::slotted(option.selected) {
-      color: var(--document-select-active-color) !important;
+    .document-row.active {
+      color: var(--document-select-active-row) !important;
       font-weight: bold;
     }
 
-    img {
-      display: block;
-      height: 100%;
-      aspect-ratio: 1;
+    .document-row .icon {
+      height: calc(var(--document-select-row-height) * 0.8);
+      flex-shrink: 0;
     }
+
     /* .document-row:hover .document-description {
       display: table;
       white-space: wrap;
@@ -87,14 +82,14 @@ export class DocumentSelect extends LitElement {
 
   static properties = {
     value: { type: String },
-    optionIcon: { type: String },
+    icon: { type: String },
   };
 
   constructor() {
     super();
 
     this.value = "";
-    this.optionIcon = "";
+    this.icon = "";
 
     // Refs
     this.slotRef = createRef();
@@ -139,7 +134,12 @@ export class DocumentSelect extends LitElement {
       .filter((element) => element.tagName === "OPTION")
       .map((option) => {
         return html` <div class="document-row">
-          <img src=${this.optionIcon} alt="icon" />
+          <object
+            class="icon"
+            type="image/svg+xml"
+            data=${this.icon}
+            ?hidden=${!this.icon}
+          ></object>
           <option value=${option.value}>${option.textContent}</option>
         </div>`;
       });

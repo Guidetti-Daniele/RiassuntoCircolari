@@ -181,12 +181,13 @@ main .form {
   --document-select-empty-text: var(--empty-text-gray);
   --document-select-empty-padding: 3em;
   --document-select-empty-background: #727272;
-  --document-select-option-hover: #3f3f3fbe;
-  --document-select-option-horizontal-padding: 1.5em;
-  --document-select-option-vertical-padding: 0.7em;
-  --document-select-option-icon-space: 10px;
-  --document-select-option-line: #fff;
-  --document-select-active-color: var(--green);
+  --document-select-row-height: 30px;
+  --document-select-row-background-hover: #3f3f3fbe;
+  --document-select-row-horizontal-padding: 0.9em;
+  --document-select-row-vertical-padding: 1.2em;
+  --document-select-row-gap: 0.62em;
+  --document-select-row-line: #fff;
+  --document-select-active-row: var(--green);
 }
 
 /* -------------------------------------------- */
