@@ -9,7 +9,7 @@ import {
   createRef,
 } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/ref.js";
 
-import { classMap } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/class-map.js";
+import { when } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/when.js";
 
 export class DocumentSelect extends LitElement {
   static styles = css`
@@ -30,15 +30,16 @@ export class DocumentSelect extends LitElement {
       overflow-y: auto;
     }
 
-    .wrapper.empty {
-      padding: var(--document-select-empty-padding) 0;
+    .wrapper:has(.empty-text) {
+      background-color: var(--document-select-empty-background);
+      padding: var(--document-select-empty-padding);
       justify-content: center;
       align-items: center;
-      background-color: var(--document-select-empty-background);
     }
 
-    .wrapper.empty slot {
+    .empty-text {
       color: var(--document-select-empty-text);
+      text-align: center;
     }
 
     ::slotted(option) {
@@ -47,7 +48,6 @@ export class DocumentSelect extends LitElement {
         var(--document-select-option-horizontal-padding) !important;
       display: flex;
       align-items: center;
-      gap: 2px;
       transition: background-color 0.5s;
       cursor: pointer;
 
@@ -67,6 +67,12 @@ export class DocumentSelect extends LitElement {
       color: var(--document-select-active-color) !important;
       font-weight: bold;
     }
+
+    img {
+      display: block;
+      height: 100%;
+      aspect-ratio: 1;
+    }
     /* .document-row:hover .document-description {
       display: table;
       white-space: wrap;
@@ -81,12 +87,14 @@ export class DocumentSelect extends LitElement {
 
   static properties = {
     value: { type: String },
+    optionIcon: { type: String },
   };
 
   constructor() {
     super();
 
     this.value = "";
+    this.optionIcon = "";
 
     // Refs
     this.slotRef = createRef();
@@ -116,18 +124,37 @@ export class DocumentSelect extends LitElement {
     this.dispatchEvent(new Event("change"));
   }
 
+  isEmpty() {
+    return this.shadowRoot.host.children.length === 0;
+  }
+
+  getEmptyText() {
+    return html`<p class="empty-text">
+      Nessuna circolare disponibile per i campi selezionati
+    </p>`;
+  }
+
+  getDocumentRows() {
+    return Array.from(this.shadowRoot.host.children)
+      .filter((element) => element.tagName === "OPTION")
+      .map((option) => {
+        return html` <div class="document-row">
+          <img src=${this.optionIcon} alt="icon" />
+          <option value=${option.value}>${option.textContent}</option>
+        </div>`;
+      });
+  }
+
   // ----------------------------------------
 
   render() {
     return html`
-      <div
-        class="wrapper ${classMap({
-          empty: this.shadowRoot.host.children.length === 0,
-        })}"
-      >
-        <slot ${ref(this.slotRef)} @click=${this.setValue}
-          >Nessuna circolare disponibile per i campi selezionati</slot
-        >
+      <div class="wrapper">
+        ${when(
+          this.isEmpty(),
+          () => this.getEmptyText(),
+          () => this.getDocumentRows()
+        )}
       </div>
     `;
   }

@@ -177,13 +177,14 @@ main .form {
 
   --document-select-color: #fff;
   --document-select-background: #131212;
+  --document-select-border-radius: var(--border-radius);
   --document-select-empty-text: var(--empty-text-gray);
   --document-select-empty-padding: 3em;
   --document-select-empty-background: #727272;
-  --document-select-border-radius: var(--border-radius);
+  --document-select-option-hover: #3f3f3fbe;
   --document-select-option-horizontal-padding: 1.5em;
   --document-select-option-vertical-padding: 0.7em;
-  --document-select-option-hover: #3f3f3fbe;
+  --document-select-option-icon-space: 10px;
   --document-select-option-line: #fff;
   --document-select-active-color: var(--green);
 }
