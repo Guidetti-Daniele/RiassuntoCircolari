@@ -45,23 +45,18 @@ export class DocumentSelect extends LitElement {
 
     .document-row {
       width: 100%;
-      height: var(--document-select-row-height);
+      min-height: var(--document-select-row-height);
       padding: var(--document-select-row-vertical-padding)
         var(--document-select-row-horizontal-padding) !important;
       display: flex;
       align-items: center;
       gap: var(--document-select-row-gap);
-      transition: background-color 0.5s;
+      transition: background-color, max-height, 0.5s;
       cursor: pointer;
     }
 
     .document-row:hover {
       background-color: var(--document-select-row-background-hover);
-    }
-
-    .document-row.active option {
-      color: var(--document-select-active-row);
-      font-weight: bold;
     }
 
     .document-row .icon {
@@ -70,16 +65,20 @@ export class DocumentSelect extends LitElement {
       pointer-events: none;
     }
 
-    /* .document-row:hover .document-description {
-      display: table;
+    .document-row option {
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .document-row:hover option {
       white-space: wrap;
     }
 
-    .document-row:hover .document-description::before {
-      display: table-cell;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-    } */
+    .document-row.active option {
+      color: var(--document-select-active-row);
+      font-weight: bold;
+    }
   `;
 
   static properties = {
@@ -168,6 +167,7 @@ export class DocumentSelect extends LitElement {
             data=${this.icon}
             ?hidden=${!this.icon}
           ></object>
+
           <option value=${option.value}>${option.textContent}</option>
         </div>`;
       });
