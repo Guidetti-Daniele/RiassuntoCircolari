@@ -26,6 +26,19 @@ export class DocumentSelect extends LitElement {
       color: var(--document-select-color);
     }
 
+    ::-webkit-scrollbar {
+      width: var(--document-select-scrollbar-width);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--document-select-scrollbar-thumb-background);
+      border-radius: var(--document-select-scrollbar-border-radius);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--document-select-scrollbar-track-background);
+    }
+
     .wrapper {
       width: 100%;
       height: 100%;

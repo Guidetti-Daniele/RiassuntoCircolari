@@ -66,16 +66,16 @@ export class FieldSelect extends LitElement {
       transition: max-height 0.2s;
     }
 
-    .menu::-webkit-scrollbar {
+    ::-webkit-scrollbar {
       width: var(--field-select-scrollbar-width);
     }
 
-    .menu::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-thumb {
       background: var(--field-select-scrollbar-thumb-background);
       border-radius: var(--field-select-scrollbar-border-radius);
     }
 
-    .menu::-webkit-scrollbar-track {
+    ::-webkit-scrollbar-track {
       background: var(--field-select-scrollbar-track-background);
     }
 

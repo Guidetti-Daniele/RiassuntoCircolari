@@ -17,6 +17,7 @@
   --light-blue: #0088d1;
   --empty-text-gray: #222222;
 
+  --scrollbar-width: 4px;
   --border-radius: 5px;
   --transition-time: 0.3s;
 
@@ -32,11 +33,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: var(--scrollbar-width);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--green);
+  border-radius: var(--border-radius);
 }
 
 ::-webkit-scrollbar-track {
@@ -162,9 +164,10 @@ main .form {
   --field-select-option-vertical-padding: 0.7em;
   --field-select-option-hover: #3f3f3fbe;
   --field-select-option-height: 30px;
-  --field-select-scrollbar-width: 4px;
-  --field-select-scrollbar-border-radius: var(--border-radius);
+  --field-select-scrollbar-width: var(--scrollbar-width);
   --field-select-scrollbar-thumb-background: var(--green);
+  --field-select-scrollbar-track-background: var(--primary);
+  --field-select-scrollbar-border-radius: var(--border-radius);
 }
 
 /* -------------------------------------------- */
@@ -186,8 +189,11 @@ main .form {
   --document-select-row-horizontal-padding: 0.9em;
   --document-select-row-vertical-padding: 1.2em;
   --document-select-row-gap: 0.62em;
-  --document-select-row-line: #fff;
   --document-select-active-row: var(--green);
+  --document-select-scrollbar-width: var(--scrollbar-width);
+  --document-select-scrollbar-thumb-background: var(--green);
+  --document-select-scrollbar-track-background: var(--primary);
+  --document-select-scrollbar-border-radius: var(--border-radius);
 }
 
 /* -------------------------------------------- */
