@@ -45,7 +45,7 @@ export class DocumentSelect extends LitElement {
 
     .document-row {
       width: 100%;
-      min-height: var(--document-select-row-height);
+      height: fit-content;
       padding: var(--document-select-row-vertical-padding)
         var(--document-select-row-horizontal-padding) !important;
       display: flex;
