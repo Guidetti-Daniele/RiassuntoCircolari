@@ -117,7 +117,6 @@ export class FieldSelect extends LitElement {
   constructor() {
     super();
 
-    this.updatedSlot = false; // This flag is used to avoid to run the handleSlotChange method twice
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
     this.name = ""; // Name of the field select
     this.valueTuple = []; // The selected option
