@@ -9,7 +9,7 @@
 
   --primary: #212121;
   --background: #000000;
-  --white: #f0f0f0;
+  --text: #f0f0f0;
   --green: #71ad00;
   --red: #d10000;
   --orange: #d18800;
@@ -21,7 +21,7 @@
   --border-radius: 5px;
   --transition-time: 0.3s;
 
-  color: var(--white);
+  color: var(--text);
   font-family: "Inter", sans-serif;
 }
 
@@ -154,7 +154,7 @@ main .form {
   height: 40px;
   margin: 0.6em 0px;
 
-  --field-select-color: #fff;
+  --field-select-color: var(--text);
   --field-select-background: #131212;
   --field-select-background-hover: #13121280;
   --field-select-focus-border-color: var(--green);
@@ -178,7 +178,7 @@ main .form {
   width: 100%;
   max-height: 400px;
 
-  --document-select-color: #fff;
+  --document-select-color: var(--text);
   --document-select-background: #131212;
   --document-select-border-radius: var(--border-radius);
   --document-select-empty-text: var(--empty-text-gray);
@@ -189,6 +189,7 @@ main .form {
   --document-select-row-horizontal-padding: 0.9em;
   --document-select-row-vertical-padding: 1.2em;
   --document-select-row-gap: 0.62em;
+  --document-select-row-line-color: var(--text);
   --document-select-active-row: var(--green);
   --document-select-scrollbar-width: var(--scrollbar-width);
   --document-select-scrollbar-thumb-background: var(--green);

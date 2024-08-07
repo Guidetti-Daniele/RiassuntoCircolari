@@ -73,6 +73,10 @@ export class DocumentSelect extends LitElement {
       cursor: pointer;
     }
 
+    .document-row:not(:last-child) {
+      border-bottom: 1px solid var(--document-select-row-line-color);
+    }
+
     .document-row:hover {
       background-color: var(--document-select-row-background-hover);
     }
