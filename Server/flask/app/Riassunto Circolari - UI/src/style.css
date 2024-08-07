@@ -176,7 +176,7 @@ main .form {
 
 .input-row document-select {
   width: 100%;
-  height: 400px;
+  max-height: 400px;
 
   --document-select-color: #fff;
   --document-select-background: #131212;
