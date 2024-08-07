@@ -188,26 +188,24 @@ export class DocumentSelect extends LitElement {
   }
 
   getDocumentRows() {
-    return Array.from(this.shadowRoot.host.children)
-      .filter((element) => element.tagName === "OPTION")
-      .map((option, index) => {
-        return html` <div
-          class="document-row ${classMap({
-            active: this.value === option.value,
-          })}"
-          @click=${() => this.setValue(option.value)}
-          @mouseenter=${() => this.scrollIntoDocumentRowView(index)}
-        >
-          <object
-            class="icon"
-            type="image/svg+xml"
-            data=${this.icon}
-            ?hidden=${!this.icon}
-          ></object>
+    return Array.from(this.shadowRoot.host.children).map((option, index) => {
+      return html` <div
+        class="document-row ${classMap({
+          active: this.value === option.value,
+        })}"
+        @click=${() => this.setValue(option.value)}
+        @mouseenter=${() => this.scrollIntoDocumentRowView(index)}
+      >
+        <object
+          class="icon"
+          type="image/svg+xml"
+          data=${this.icon}
+          ?hidden=${!this.icon}
+        ></object>
 
-          <option value=${option.value}>${option.textContent}</option>
-        </div>`;
-      });
+        <option value=${option.value}>${option.textContent}</option>
+      </div>`;
+    });
   }
 
   // ----------------------------------------

@@ -125,7 +125,6 @@ export class FieldSelect extends LitElement {
 
     // Refs
     this.menuRef = createRef();
-    this.slotRef = createRef();
   }
 
   connectedCallback() {
@@ -196,35 +195,8 @@ export class FieldSelect extends LitElement {
   }
 
   handleSlotChange() {
-    // Avoiding to make the method running again after this.clearSlottedElements() or
-    // other methods that changes the slot  are invoked
-    if (this.updatedSlot) {
-      this.updatedSlot = false;
-      return;
-    }
-
-    // Every slotted element which isn't an option will be removed
-    this.clearSlottedElements();
-
     // Setting the max-height of the menu according to maxElementsInView
     this.setSlotMaxHeight();
-  }
-
-  clearSlottedElements() {
-    const host = this.shadowRoot.host;
-    const slot = this.slotRef.value;
-    const slottedElements = slot.assignedElements();
-
-    Array.from(slottedElements).forEach((slotted, index) => {
-      if (slotted.tagName !== "OPTION") {
-        const child = host.children[index];
-
-        // N.B: this operation causes the event @slotchange to be fired
-        // so I set the flag updatedSlot to true to avoid to make this method running again.
-        host.removeChild(child);
-        this.updatedSlot = true;
-      }
-    });
   }
 
   setSlotMaxHeight() {
@@ -265,7 +237,6 @@ export class FieldSelect extends LitElement {
               <slot
                 @slotchange=${this.handleSlotChange}
                 @click=${this.setValue}
-                ${ref(this.slotRef)}
               >
                 Error no option provided!
               </slot>
