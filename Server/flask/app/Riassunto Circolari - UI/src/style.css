@@ -10,16 +10,22 @@
   --primary: #212121;
   --background: #000000;
   --text: #f0f0f0;
+  --empty-text: #222222;
+
   --green: #71ad00;
   --red: #d10000;
   --orange: #d18800;
   --yellow: #dcbc18;
   --light-blue: #0088d1;
-  --empty-text-gray: #222222;
 
   --scrollbar-width: 4px;
   --border-radius: 5px;
   --transition-time: 0.3s;
+
+  --submit-btn-text: #000000;
+  --submit-btn-background: #ffffff;
+
+  --markdown-display-background: #ffffff;
 
   color: var(--text);
   font-family: "Inter", sans-serif;
@@ -51,7 +57,7 @@ body {
 
 /* -------------------------------------------- */
 
-/* NAVBAR */
+/* NAVBAR, LOGO, TITLE */
 
 nav {
   width: 100%;
@@ -70,15 +76,12 @@ nav .logo {
 }
 
 nav .logo img {
-  width: 100%;
-  aspect-ratio: 1.72;
-}
-
-nav .logo img {
   position: absolute;
+  transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  aspect-ratio: 1.72;
   transition: opacity var(--transition-time);
 }
 
@@ -86,7 +89,7 @@ img[alt="logo"] {
   z-index: 2;
 }
 
-img[alt="logo-green"] {
+img[alt="logo-on-hover"] {
   z-index: 1;
 }
 
@@ -114,7 +117,7 @@ nav .title-wrapper .title:hover {
 
 /* -------------------------------------------- */
 
-/* MAIN WRAPPER */
+/* MAIN, FORM, MARKDOWN DISPLAY */
 
 main {
   flex-grow: 1;
@@ -125,14 +128,34 @@ main {
   padding: 1rem;
 }
 
-main .form {
+main > * {
   width: 500px;
   max-width: 100%;
   min-height: 410px;
   max-height: 100%;
   padding: 1em 2em;
-  background: var(--primary);
   border-radius: var(--border-radius);
+}
+
+main .form {
+  background: var(--primary);
+}
+
+#markdownDisplay {
+  position: relative;
+  background: var(--markdown-display-background);
+}
+
+#markdownDisplay:empty::before {
+  content: "Qui verrà visualizzato il riassunto.\aPer iniziare selezionare una circolare.";
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  color: var(--empty-text);
+  text-align: center;
+  font-size: clamp(1rem, 10px, 20pt);
+  white-space: pre-wrap;
 }
 
 /* -------------------------------------------- */
@@ -181,7 +204,7 @@ main .form {
   --document-select-color: var(--text);
   --document-select-background: #131212;
   --document-select-border-radius: var(--border-radius);
-  --document-select-empty-text: var(--empty-text-gray);
+  --document-select-empty-text: var(--empty-text);
   --document-select-empty-padding: 3em;
   --document-select-empty-background: #727272;
   --document-select-row-height: 30px;
@@ -199,43 +222,19 @@ main .form {
 
 /* -------------------------------------------- */
 
-/* MARKDOWN DISPLAY */
-
-#markdownDisplay {
-  position: relative;
-  width: 500px;
-  max-width: 100%;
-  min-height: 410px;
-  padding: 1em 2em;
-  background: white;
-  border-radius: var(--border-radius);
-}
-
-#markdownDisplay:empty::before {
-  content: "Qui verrà visualizzato il riassunto.\aPer iniziare selezionare una circolare.";
-  white-space: pre-wrap;
-  color: var(--empty-text-gray);
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  font-size: clamp(1rem, 10px, 20pt);
-}
-
-/* -------------------------------------------- */
-
 /* SUBMIT-BTN */
 
 .input-row .submit-btn {
   flex-basis: 33.33%;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 0.8em;
-  color: black;
+  color: var(--submit-btn-text);
+  background: var(--submit-btn-background);
   cursor: pointer;
 }
 
 .input-row .submit-btn:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

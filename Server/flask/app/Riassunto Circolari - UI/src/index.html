@@ -4,14 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Riassunto Circolari - UI</title>
+
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
     <!-- Lit components -->
     <script type="module" src="../src/web components/FieldSelect.js"></script>
@@ -26,7 +20,7 @@
       <div class="logo">
         <a href="https://www.ispiana.edu.it/" target="_blank">
           <img src="../static/logo.png" alt="logo" />
-          <img src="../static/logo-green.png" alt="logo-green" />
+          <img src="../static/logo-green.png" alt="logo-on-hover" />
         </a>
       </div>
 
@@ -36,7 +30,7 @@
     </nav>
 
     <main>
-      <div class="form">
+      <section class="form">
         <div class="input-row">
           <field-select name="Destinatario">
             <option value="Dirigenti Scolastici">Dirigenti Scolastici</option>
@@ -116,9 +110,9 @@
         <div class="input-row">
           <button class="submit-btn" disabled>RIASSUMI</button>
         </div>
-      </div>
+      </section>
 
-      <div id="markdownDisplay"></div>
+      <section id="markdownDisplay"></section>
     </main>
 
     <script>
