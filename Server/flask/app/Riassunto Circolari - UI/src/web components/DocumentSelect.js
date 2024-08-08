@@ -18,7 +18,7 @@ export class DocumentSelect extends LitElement {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      color: var(--document-select-color);
+      color: var(--document-select-text);
     }
 
     ::-webkit-scrollbar {
@@ -59,25 +59,25 @@ export class DocumentSelect extends LitElement {
     .document-row {
       width: 100%;
       height: fit-content;
-      padding: var(--document-select-row-vertical-padding)
-        var(--document-select-row-horizontal-padding) !important;
+      padding: var(--document-select-option-vertical-padding)
+        var(--document-select-option-horizontal-padding) !important;
       display: flex;
       align-items: center;
-      gap: var(--document-select-row-gap);
+      gap: var(--document-select-option-gap);
       transition: background-color, 0.5s;
       cursor: pointer;
     }
 
     .document-row:not(:last-child) {
-      border-bottom: 1px solid var(--document-select-row-line-color);
+      border-bottom: 1px solid var(--document-select-option-separation-line);
     }
 
     .document-row:hover {
-      background-color: var(--document-select-row-background-hover);
+      background-color: var(--document-select-option-background-on-hover);
     }
 
     .document-row .icon {
-      height: calc(var(--document-select-row-height) * 0.8);
+      height: calc(var(--document-select-option-height) * 0.8);
       flex-shrink: 0;
       pointer-events: none;
     }
@@ -93,7 +93,7 @@ export class DocumentSelect extends LitElement {
     }
 
     .document-row.active option {
-      color: var(--document-select-active-row);
+      color: var(--document-select-text-active);
       font-weight: bold;
     }
   `;
@@ -112,30 +112,15 @@ export class DocumentSelect extends LitElement {
 
   // CLASS METHODS
 
-  setValue(value) {
-    const previousValue = this.value;
-    this.value = value;
-
-    // Coloring the icon of the active option with the active color USING THE FILL ATTRIBUTE of the SVG tag
-
-    // 1). First removing the active color to the icon of the previous active option
-    this.setIconColor(this.getNormalColor(), previousValue);
-
-    // 2). Then apply the active color to the icon of the new active option
-    this.setIconColor(this.getActiveColor(), value);
-
-    this.dispatchEvent(new Event("change"));
-  }
-
   getNormalColor() {
     return getComputedStyle(this.shadowRoot.host).getPropertyValue(
-      "--document-select-color"
+      "--document-select-text"
     );
   }
 
   getActiveColor() {
     return getComputedStyle(this.shadowRoot.host).getPropertyValue(
-      "--document-select-active-row"
+      "--document-select-text-active"
     );
   }
 
@@ -143,10 +128,6 @@ export class DocumentSelect extends LitElement {
     return this.renderRoot?.querySelector(
       `.document-row option[value="${value}"]`
     );
-  }
-
-  getDocumentRowByIndex(index) {
-    return this.renderRoot?.querySelectorAll(".document-row")[index];
   }
 
   setIconColor(color, optionValue) {
@@ -162,6 +143,21 @@ export class DocumentSelect extends LitElement {
     }
   }
 
+  setValue(value) {
+    const previousValue = this.value;
+    this.value = value;
+
+    // Coloring the icon of the active option with the active color USING THE FILL ATTRIBUTE of the SVG tag
+
+    // 1). First removing the active color to the icon of the previous active option
+    this.setIconColor(this.getNormalColor(), previousValue);
+
+    // 2). Then apply the active color to the icon of the new active option
+    this.setIconColor(this.getActiveColor(), value);
+
+    this.dispatchEvent(new Event("change"));
+  }
+
   isEmpty() {
     return this.shadowRoot.host.children.length === 0;
   }
@@ -173,7 +169,7 @@ export class DocumentSelect extends LitElement {
   }
 
   getDocumentRows() {
-    return Array.from(this.shadowRoot.host.children).map((option, index) => {
+    return Array.from(this.shadowRoot.host.children).map((option) => {
       return html` <div
         class="document-row ${classMap({
           active: this.value === option.value,
