@@ -177,16 +177,23 @@ main .form {
   height: 40px;
   margin: 0.6em 0px;
 
-  --field-select-color: var(--text);
+  --field-select-text: var(--text);
   --field-select-background: #131212;
-  --field-select-background-hover: #13121280;
-  --field-select-focus-border-color: var(--green);
+  --field-select-background-on-hover: #13121280;
+
   --field-select-horizontal-padding: 1.5em;
   --field-select-vertical-padding: 1.5em;
+
+  --field-select-border-on-focus: var(--green);
+  --field-select-border-radius: var(--border-radius);
+
+  --field-select-option-background-on-hover: #3f3f3fbe;
+
+  --field-select-option-height: 30px;
+
   --field-select-option-horizontal-padding: 1.5em;
   --field-select-option-vertical-padding: 0.7em;
-  --field-select-option-hover: #3f3f3fbe;
-  --field-select-option-height: 30px;
+
   --field-select-scrollbar-width: var(--scrollbar-width);
   --field-select-scrollbar-thumb-background: var(--green);
   --field-select-scrollbar-track-background: var(--primary);

@@ -19,51 +19,7 @@ export class FieldSelect extends LitElement {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      color: var(--field-select-color);
-    }
-
-    .wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .current-option {
-      width: 100%;
-      height: 100%;
-      padding: var(--field-select-vertical-padding)
-        var(--field-select-horizontal-padding);
-      border-radius: 5px;
-      background-color: var(--field-select-background);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.5s;
-      cursor: pointer;
-    }
-
-    .current-option:hover {
-      background: var(--field-select-background-hover);
-    }
-
-    .arrow {
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 6px solid currentColor;
-      transition: rotate 0.5s;
-    }
-
-    .menu {
-      position: absolute;
-      transform-origin: top;
-      width: 100%;
-      border-radius: 5px;
-      overflow-y: auto;
-      background: var(--field-select-background);
-      z-index: 10;
-
-      max-height: 0px;
-      transition: max-height 0.2s;
+      color: var(--field-select-text);
     }
 
     ::-webkit-scrollbar {
@@ -79,20 +35,66 @@ export class FieldSelect extends LitElement {
       background: var(--field-select-scrollbar-track-background);
     }
 
+    .wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .current-option {
+      width: 100%;
+      height: 100%;
+      padding: var(--field-select-vertical-padding)
+        var(--field-select-horizontal-padding);
+      border-radius: var(--field-select-border-radius);
+      background-color: var(--field-select-background);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.5s;
+      cursor: pointer;
+    }
+
+    .current-option:hover {
+      background: var(--field-select-background-on-hover);
+    }
+
+    .arrow {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid currentColor;
+      transition: rotate 0.5s;
+    }
+
+    .menu {
+      position: absolute;
+      transform-origin: top;
+      width: 100%;
+      border-radius: var(--field-select-border-radius);
+      overflow-y: auto;
+      background: var(--field-select-background);
+      z-index: 10;
+
+      max-height: 0px;
+      transition: max-height 0.2s;
+    }
+
     ::slotted(option) {
       display: flex;
       align-items: center;
       min-height: var(--field-select-option-height);
       padding: var(--field-select-option-vertical-padding)
         var(--field-select-option-horizontal-padding) !important;
-      color: var(--field-select-color) !important;
+      color: var(--field-select-text) !important;
       transition: background-color 0.5s;
       cursor: pointer;
     }
 
     ::slotted(option:hover) {
-      background-color: var(--field-select-option-hover);
+      background-color: var(--field-select-option-background-on-hover);
     }
+
+    /* When the FieldSelect is opened */
 
     .open .menu {
       max-height: var(--menu-max-height);
@@ -100,7 +102,7 @@ export class FieldSelect extends LitElement {
     }
 
     .open .current-option {
-      border: 1px solid var(--field-select-focus-border-color);
+      border: 1px solid var(--field-select-border-on-focus);
     }
 
     .open .arrow {
@@ -118,8 +120,8 @@ export class FieldSelect extends LitElement {
     super();
 
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
-    this.name = ""; // Name of the field select
-    this.valueTuple = []; // The selected option
+    this.name = ""; // Name of the field select if not provided the component won't be rendered
+    this.valueTuple = []; // Tuple of 2 elements representing the selected option: the first value is the option text, the second is the option value
     this.isOpened = false; // Flag that indicates if the option menu is opened
 
     // Refs
@@ -226,21 +228,21 @@ export class FieldSelect extends LitElement {
       ${when(
         this.name,
         () => html`
-          <div class="wrapper ${classMap({ open: this.isOpened })}">
-            <div class="current-option">
+          <main class="wrapper ${classMap({ open: this.isOpened })}">
+            <section class="current-option">
               <span>${this.valueTuple[0] || this.name}</span>
               <div class="arrow"></div>
-            </div>
+            </section>
 
-            <div class="menu" ${ref(this.menuRef)}>
+            <section class="menu" ${ref(this.menuRef)}>
               <slot
                 @slotchange=${this.handleSlotChange}
                 @click=${this.setValue}
               >
                 Error no option provided!
               </slot>
-            </div>
-          </div>
+            </section>
+          </main>
         `
       )}
     `;
