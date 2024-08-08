@@ -4,11 +4,6 @@ import {
   css,
 } from "https://cdn.jsdelivr.net/npm/lit@3.1.4/+esm";
 
-import {
-  ref,
-  createRef,
-} from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/ref.js";
-
 import { when } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/when.js";
 
 import { classMap } from "https://cdn.jsdelivr.net/npm/lit-html@3.1.4/directives/class-map.js";
@@ -113,9 +108,6 @@ export class DocumentSelect extends LitElement {
 
     this.value = "";
     this.icon = "";
-
-    //  Refs
-    this.wrapperRef = createRef();
   }
 
   // CLASS METHODS
@@ -170,17 +162,6 @@ export class DocumentSelect extends LitElement {
     }
   }
 
-  scrollIntoDocumentRowView(index) {
-    const documentRow = this.getDocumentRowByIndex(index);
-
-    // Getting the bottom coordinates of the hovered row to determinate if scrolling is needed
-    const documentRowBottom = documentRow.getBoundingClientRect().bottom;
-    const wrapperBottom = this.wrapperRef.value.getBoundingClientRect().bottom;
-
-    if (documentRowBottom > wrapperBottom)
-      documentRow.scrollIntoView({ behavior: "smooth", block: "end" });
-  }
-
   isEmpty() {
     return this.shadowRoot.host.children.length === 0;
   }
@@ -198,7 +179,6 @@ export class DocumentSelect extends LitElement {
           active: this.value === option.value,
         })}"
         @click=${() => this.setValue(option.value)}
-        @mouseenter=${() => this.scrollIntoDocumentRowView(index)}
       >
         <object
           class="icon"
@@ -216,7 +196,7 @@ export class DocumentSelect extends LitElement {
 
   render() {
     return html`
-      <div class="wrapper" ${ref(this.wrapperRef)}>
+      <div class="wrapper">
         ${when(
           this.isEmpty(),
           () => this.getEmptyText(),
