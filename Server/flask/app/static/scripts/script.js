@@ -76,7 +76,8 @@ function setupDocumentSelect() {
   });
 
   documentSelect.addEventListener("change", (event) => {
-    if (event.target.value) submitBtn.removeAttribute("disabled");
+    if (event.target.value && submitBtn.hasAttribute("disabled"))
+      submitBtn.removeAttribute("disabled");
   });
 }
 
