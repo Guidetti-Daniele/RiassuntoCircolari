@@ -96,7 +96,7 @@ function setupSubmitButton() {
         )}&type=${encodeURIComponent(type)}`;
 
         const response = await fetch(resource);
-        const data = response.json();
+        const data = await response.json();
 
         const text = data || "Errore";
         const markdown = marked.parse(text);
