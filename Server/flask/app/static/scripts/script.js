@@ -48,12 +48,8 @@ async function fetchDocumentData(endpoint, data) {
 
     documentSelect.innerHTML = "";
 
-    if (data.length === 0) {
-      submitBtn.setAttribute("disabled", "");
-    } else {
-      data.forEach((item) => addOptions(documentSelect, item[1], item[0]));
-      submitBtn.removeAttribute("disabled", "");
-    }
+    if (data.length === 0) submitBtn.setAttribute("disabled", "");
+    else data.forEach((item) => addOptions(documentSelect, item[1], item[0]));
   } catch (error) {
     console.error("Error", error);
   }
@@ -61,6 +57,8 @@ async function fetchDocumentData(endpoint, data) {
 
 function setupDocumentSelect() {
   const triggers = ["type", "recipient", "class"];
+  const documentSelect = document.getElementById("document");
+  const submitBtn = document.getElementById("submit-btn");
 
   triggers.forEach((trigger) => {
     const fieldSelect = document.getElementById(trigger);
@@ -75,6 +73,10 @@ function setupDocumentSelect() {
         fetchDocumentData("/get-circ", data);
       }
     });
+  });
+
+  documentSelect.addEventListener("change", (event) => {
+    if (event.target.value) submitBtn.removeAttribute("disabled");
   });
 }
 
