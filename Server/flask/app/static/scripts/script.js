@@ -44,8 +44,14 @@ async function fetchDocumentData(endpoint, data) {
     const data = await response.json();
 
     const documentSelect = document.getElementById("document");
+    const submitBtn = document.getElementById("submit-btn");
 
-    data.forEach((item) => addOptions(documentSelect, item[1], item[0]));
+    if (data.length === 0) {
+      submitBtn.setAttribute("disabled", "");
+    } else {
+      data.forEach((item) => addOptions(documentSelect, item[1], item[0]));
+      submitBtn.removeAttribute("disabled", "");
+    }
   } catch (error) {
     console.error("Error", error);
   }
