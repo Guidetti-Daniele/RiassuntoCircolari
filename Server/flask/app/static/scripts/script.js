@@ -105,8 +105,6 @@ function setupSubmitButton() {
       } catch (error) {
         console.error("Error", error);
       }
-    } else {
-      alert("Selezionare un documento");
     }
   });
 }
