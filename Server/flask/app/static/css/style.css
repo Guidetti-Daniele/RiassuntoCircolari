@@ -137,7 +137,7 @@ main > * {
   border-radius: var(--border-radius);
 }
 
-main .form {
+#form {
   background: var(--primary);
 }
 
@@ -238,16 +238,18 @@ main .form {
 
 /* SUBMIT-BTN */
 
-.input-row .submit-btn {
+#submit-btn {
   flex-basis: 33.33%;
   margin: 0 auto;
   padding: 0.8em;
+  border: none;
+  outline: none;
   color: var(--submit-btn-text);
   background: var(--submit-btn-background);
   cursor: pointer;
 }
 
-.input-row .submit-btn:disabled {
+#submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -262,12 +264,12 @@ main .form {
     gap: 0px;
   }
 
-  main .form {
+  #form {
     flex-grow: 1;
     height: 100%;
   }
 
-  .input-row .submit-btn {
+  #submit-btn {
     flex-basis: 100%;
   }
 }

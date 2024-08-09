@@ -121,7 +121,7 @@ export class FieldSelect extends LitElement {
 
     this.maxElementsInView = 7; // After this number of options will be compare a scrollbar
     this.name = ""; // Name of the field select if not provided the component won't be rendered
-    this.valueTuple = []; // Tuple of 2 elements representing the selected option: the first value is the option text, the second is the option value
+    this.valueTuple = ["", ""]; // Tuple of 2 elements representing the selected option: the first value is the option text, the second is the option value
     this.isOpened = false; // Flag that indicates if the option menu is opened
 
     // Refs
