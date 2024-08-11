@@ -26,6 +26,7 @@
   --submit-btn-background: #ffffff;
 
   --markdown-display-background: #ffffff;
+  --markdown-display-text: #000000;
 
   color: var(--text);
   font-family: "Inter", sans-serif;
@@ -144,6 +145,10 @@ main > * {
 #markdownDisplay {
   position: relative;
   background: var(--markdown-display-background);
+}
+
+#markdownDisplay * {
+  color: var(--markdown-display-text) !important;
 }
 
 #markdownDisplay:empty::before {
