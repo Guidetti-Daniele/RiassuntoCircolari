@@ -18,9 +18,7 @@ async function setupFieldSelect(elementId, endpoint) {
 
     const fieldSelect = document.getElementById(elementId);
 
-    data
-      .filter((item) => item !== "#separator#")
-      .forEach((item) => addOptions(fieldSelect, item, item));
+    data.forEach((item) => addOptions(fieldSelect, item, item));
   } catch (error) {
     console.error("Error", error);
   }
