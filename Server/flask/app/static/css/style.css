@@ -10,7 +10,7 @@
   --primary: #212121;
   --background: #000000;
   --text: #f0f0f0;
-  --empty-text: #222222;
+  --fallback-text: #222222;
 
   --green: #71ad00;
   --red: #d10000;
@@ -152,7 +152,7 @@ main > * {
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
-  color: var(--empty-text);
+  color: var(--fallback-text);
   text-align: center;
   font-size: clamp(1rem, 10px, 20pt);
   white-space: pre-wrap;
@@ -212,9 +212,9 @@ main > * {
   --document-select-text-active: var(--green);
   --document-select-background: #131212;
 
-  --document-select-empty-text: var(--empty-text);
-  --document-select-empty-background: #727272;
-  --document-select-empty-padding: 3em;
+  --document-select-fallback-text: var(--fallback-text);
+  --document-select-fallback-background: #727272;
+  --document-select-fallback-padding: 3em;
 
   --document-select-border-radius: var(--border-radius);
 

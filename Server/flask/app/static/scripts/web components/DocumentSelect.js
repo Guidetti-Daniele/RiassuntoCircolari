@@ -44,15 +44,15 @@ export class DocumentSelect extends LitElement {
       overflow-y: auto;
     }
 
-    .wrapper:has(.empty-text) {
-      background-color: var(--document-select-empty-background);
-      padding: var(--document-select-empty-padding);
+    .wrapper:has(.fallback-text) {
+      background-color: var(--document-select-fallback-background);
+      padding: var(--document-select-fallback-padding);
       justify-content: center;
       align-items: center;
     }
 
-    .empty-text {
-      color: var(--document-select-empty-text);
+    .fallback-text {
+      color: var(--document-select-fallback-text);
       text-align: center;
     }
 
@@ -101,27 +101,21 @@ export class DocumentSelect extends LitElement {
   static properties = {
     value: { type: String },
     icon: { type: String },
+    documentList: { type: Array },
   };
 
   constructor() {
     super();
 
-    this.value = "";
-    this.icon = "";
+    this.value = ""; // Hash string of the document selected
+    this.icon = ""; // URL string of the svg icon rendered for each documentRow
+    this.documentList = []; // Array of the option slotted elements
   }
 
   // CLASS METHODS
 
-  getNormalColor() {
-    return getComputedStyle(this.shadowRoot.host).getPropertyValue(
-      "--document-select-text"
-    );
-  }
-
-  getActiveColor() {
-    return getComputedStyle(this.shadowRoot.host).getPropertyValue(
-      "--document-select-text-active"
-    );
+  getColor(colorName) {
+    return getComputedStyle(this.shadowRoot.host).getPropertyValue(colorName);
   }
 
   getOptionByValue(value) {
@@ -147,30 +141,35 @@ export class DocumentSelect extends LitElement {
     const previousValue = this.value;
     this.value = value;
 
-    // Coloring the icon of the active option with the active color USING THE FILL ATTRIBUTE of the SVG tag
+    if (this.icon) {
+      // Coloring the icon of the active option with the active color USING THE FILL ATTRIBUTE of the SVG tag
 
-    // 1). First removing the active color to the icon of the previous active option
-    this.setIconColor(this.getNormalColor(), previousValue);
+      // 1). First removing the active color to the icon of the previous active option
+      this.setIconColor(this.getColor("--document-select-text"), previousValue);
 
-    // 2). Then apply the active color to the icon of the new active option
-    this.setIconColor(this.getActiveColor(), value);
+      // 2). Then apply the active color to the icon of the new active option
+      this.setIconColor(this.getColor("--document-select-text-active"), value);
+    }
 
     this.dispatchEvent(new Event("change"));
   }
 
-  isEmpty() {
-    return this.shadowRoot.host.children.length === 0;
+  handleSlotChange(event) {
+    const slot = event.target;
+    const slottedElements = Array.from(slot.assignedElements());
+
+    this.documentList = [...slottedElements];
   }
 
-  getEmptyText() {
-    return html`<p class="empty-text">
+  getFallbackContent() {
+    return html`<p class="fallback-text">
       Nessuna circolare disponibile per i campi selezionati
     </p>`;
   }
 
-  getDocumentRows() {
-    return Array.from(this.shadowRoot.host.children).map((option) => {
-      return html` <div
+  getDocumentList() {
+    return this.documentList.map(
+      (option) => html` <div
         class="document-row ${classMap({
           active: this.value === option.value,
         })}"
@@ -182,10 +181,9 @@ export class DocumentSelect extends LitElement {
           data=${this.icon}
           ?hidden=${!this.icon}
         ></object>
-
         <option value=${option.value}>${option.textContent}</option>
-      </div>`;
-    });
+      </div>`
+    );
   }
 
   // ----------------------------------------
@@ -194,11 +192,14 @@ export class DocumentSelect extends LitElement {
     return html`
       <div class="wrapper">
         ${when(
-          this.isEmpty(),
-          () => this.getEmptyText(),
-          () => this.getDocumentRows()
+          this.documentList.length === 0,
+          () => this.getFallbackContent(),
+          () => this.getDocumentList()
         )}
       </div>
+
+      <!-- The slot is hidden because the slotted items are rendered in the div.wrapper-->
+      <slot @slotchange=${this.handleSlotChange} hidden> </slot>
     `;
   }
 }
