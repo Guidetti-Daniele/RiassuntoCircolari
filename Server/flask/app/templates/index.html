@@ -5,40 +5,84 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Riassunto Circolari</title>
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+      type="image/x-icon"
+    />
+
+    <!-- css -->
+    <link
+      href="{{ url_for('static', filename='css/style.css') }}"
+      rel="stylesheet"
+    />
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script
+      src="{{ url_for('static', filename='scripts/script.js') }}"
+      defer
+    ></script>
+
+    <!-- Web components -->
+    <script
+      type="module"
+      src="{{ url_for('static', filename='scripts/web components/FieldSelect.js') }}"
+    ></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='scripts/web components/DocumentSelect.js') }}"
+      --
+    ></script>
   </head>
   <body>
-    <div class="title-bar">
-      <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo Ivan Piana" style="height: 40px; width: auto;" />
-      <span>Riassunto Circolari</span>
-    </div>
-
-    <div class="container">
-      <select id="recipient" class="dropdown">
-        <option value="">Destinatario</option>
-      </select>
-
-      <select id="class" class="dropdown">
-        <option value="">Classe</option>
-      </select>
-
-      <select id="type" class="dropdown">
-        <option value="">Tipo</option>
-        <option value="circolare">Circolare</option>
-        <option value="comunicazione">Comunicazione</option>
-      </select>
-
-      <select id="document" class="dropdown">
-        <option value="">Documento</option>
-      </select>
-
-      <button id="fetchTextButton">Riassumi</button>
-      <div id="markdownDisplay" style="min-height: 200px; overflow-y: auto; background-color: #f9f9f9; padding: 10px; border: 1px solid #ccc; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);">
+    <nav>
+      <div class="logo">
+        <a href="https://www.ispiana.edu.it/" target="_blank">
+          <img
+            src="{{ url_for('static', filename='assets/images/logo/logo.png') }}"
+            alt="logo"
+          />
+          <img
+            src="{{ url_for('static', filename='assets/images/logo/logo-green.png') }}"
+            alt="logo-on-hover"
+          />
+        </a>
       </div>
-    </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+      <div class="title-wrapper">
+        <h1 class="title">Riassunto Circolari</h1>
+      </div>
+    </nav>
+
+    <main>
+      <section id="form">
+        <div class="input-row">
+          <field-select id="recipient" name="Destinatario"> </field-select>
+        </div>
+
+        <div class="input-row">
+          <field-select id="class" name="Classe"> </field-select>
+        </div>
+
+        <div class="input-row">
+          <field-select id="type" name="Tipo"> </field-select>
+        </div>
+
+        <div class="input-row">
+          <document-select
+            id="document"
+            icon="{{ url_for('static', filename='assets/icons/document-icon.svg') }}"
+          >
+          </document-select>
+        </div>
+
+        <div class="input-row">
+          <button id="submit-btn" disabled>RIASSUMI</button>
+        </div>
+      </section>
+
+      <section id="markdownDisplay"></section>
+    </main>
   </body>
 </html>

@@ -48,7 +48,6 @@ def get_destin():
 
     dest_list = list(destin_set)
 
-    dest_list.append("#separator#")
     dest_list.append(parameters.all_dest)
 
     database.close_connection()
@@ -95,10 +94,6 @@ def get_class():
     for i in range(len(class_list)):
         class_list_separated.append(class_list[i])
 
-        if i < len(class_list) - 1 and class_list[i][1:] != class_list[i + 1][1:]:
-            class_list_separated.append("#separator#")
-
-    class_list_separated.append("#separator#")
     class_list_separated.append(parameters.all_class)
 
     database.close_connection()
